@@ -84,15 +84,11 @@ class QuestionController extends GetxController
   Future<void> _fetchQuestions() async {
     final response = await http.get(
       Uri.parse(
-          'https://the-trivia-api.com/api/questions?limit=7&difficulty=easy'),
+          'https://the-trivia-api.com/api/questions?limit=12&difficulty=medium'),
     );
     if (response.statusCode == 200) {
       final jsonBody = json.decode(response.body);
-      final List<dynamic> jsonQuestions = jsonBody['results'];
-      final List<Questions> questions = jsonQuestions
-          .map((jsonQuestion) => Questions.fromJson(jsonQuestion))
-          .toList();
-      _questionList = questions;
+      _questionList = jsonBody;
       log(_questionList.toString());
       
     } else {
