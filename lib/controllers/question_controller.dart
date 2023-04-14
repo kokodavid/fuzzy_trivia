@@ -1,9 +1,14 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/widgets.dart';
+import 'package:fuzzy_trivia/models/trivia_model.dart';
 import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
 
 import '../models/Questions.dart';
 import '../screens/score/score_screen.dart';
+import 'package:http/http.dart' as http;
 
 // We use get package for our state management
 
@@ -18,8 +23,9 @@ class QuestionController extends GetxController
 
   late PageController _pageController;
   PageController get pageController => this._pageController;
+  List<dynamic> _questionList = [];
 
-  List<Question> _questions = sample_data
+  final List<Question> _questions = sample_data
       .map(
         (question) => Question(
             id: question['id'],
@@ -51,6 +57,7 @@ class QuestionController extends GetxController
   void onInit() {
     // Our animation duration is 60 s
     // so our plan is to fill the progress bar within 60s
+    _fetchQuestions();
     _animationController =
         AnimationController(duration: Duration(seconds: 60), vsync: this);
     _animation = Tween<double>(begin: 0, end: 1).animate(_animationController)
@@ -74,6 +81,25 @@ class QuestionController extends GetxController
     _pageController.dispose();
   }
 
+  Future<void> _fetchQuestions() async {
+    final response = await http.get(
+      Uri.parse(
+          'https://the-trivia-api.com/api/questions?limit=7&difficulty=easy'),
+    );
+    if (response.statusCode == 200) {
+      final jsonBody = json.decode(response.body);
+      final List<dynamic> jsonQuestions = jsonBody['results'];
+      final List<Questions> questions = jsonQuestions
+          .map((jsonQuestion) => Questions.fromJson(jsonQuestion))
+          .toList();
+      _questionList = questions;
+      log(_questionList.toString());
+      
+    } else {
+      throw Exception('Failed to load questions');
+    }
+  }
+
   void checkAns(Question question, int selectedIndex) {
     // because once user press any option then it will run
     _isAnswered = true;
@@ -87,7 +113,7 @@ class QuestionController extends GetxController
     update();
 
     // Once user select an ans after 3s it will go to the next qn
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(Duration(seconds: 2), () {
       nextQuestion();
     });
   }
@@ -96,7 +122,7 @@ class QuestionController extends GetxController
     if (_questionNumber.value != _questions.length) {
       _isAnswered = false;
       _pageController.nextPage(
-          duration: Duration(milliseconds: 250), curve: Curves.ease);
+          duration: Duration(milliseconds: 10), curve: Curves.ease);
 
       // Reset the counter
       _animationController.reset();

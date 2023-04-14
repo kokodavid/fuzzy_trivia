@@ -38,6 +38,7 @@ dependencies:
 
   # to handle SVGs for Android, iOS, and Web
   flutter_svg: ^0.21.0+1
+  http: ^0.13.5
 
   # state management, intelligent dependency injection, and route management
   get: ^4.1.4
@@ -52,6 +53,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
