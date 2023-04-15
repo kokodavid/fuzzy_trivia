@@ -23,7 +23,9 @@ class QuestionController extends GetxController
 
   late PageController _pageController;
   PageController get pageController => this._pageController;
+
   List<dynamic> _questionList = [];
+  List<dynamic> get questionList => _questionList;
 
   final List<Question> _questions = sample_data
       .map(
@@ -57,9 +59,8 @@ class QuestionController extends GetxController
   void onInit() {
     // Our animation duration is 60 s
     // so our plan is to fill the progress bar within 60s
-    _fetchQuestions();
     _animationController =
-        AnimationController(duration: Duration(seconds: 60), vsync: this);
+        AnimationController(duration: const Duration(seconds: 1000), vsync: this);
     _animation = Tween<double>(begin: 0, end: 1).animate(_animationController)
       ..addListener(() {
         // update like setState
@@ -81,16 +82,20 @@ class QuestionController extends GetxController
     _pageController.dispose();
   }
 
-  Future<void> _fetchQuestions() async {
+  Future<void> fetchQuestions() async {
     final response = await http.get(
       Uri.parse(
           'https://the-trivia-api.com/api/questions?limit=12&difficulty=medium'),
     );
     if (response.statusCode == 200) {
       final jsonBody = json.decode(response.body);
-      _questionList = jsonBody;
+      final List<dynamic> jsonQuestions = jsonBody;
+      final List<Questions> questions = jsonQuestions
+          .map((jsonQuestion) => Questions.fromJson(jsonQuestion))
+          .toList();
+      _questionList = questions;
+
       log(_questionList.toString());
-      
     } else {
       throw Exception('Failed to load questions');
     }

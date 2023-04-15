@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../../constants.dart';
 import '../../../controllers/question_controller.dart';
 import '../../../models/Questions.dart';
+import '../../../models/trivia_model.dart';
 import 'option.dart';
 
 class QuestionCard extends StatelessWidget {
@@ -12,14 +13,14 @@ class QuestionCard extends StatelessWidget {
     required this.question,
   }) : super(key: key);
 
-  final Question question;
+  final Questions question;
 
   @override
   Widget build(BuildContext context) {
     QuestionController _controller = Get.put(QuestionController());
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: kDefaultPadding),
-      padding: EdgeInsets.all(kDefaultPadding),
+      margin: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+      padding: const EdgeInsets.all(kDefaultPadding),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(25),
@@ -33,15 +34,15 @@ class QuestionCard extends StatelessWidget {
                 .headline6
                 ?.copyWith(color: kBlackColor),
           ),
-          SizedBox(height: kDefaultPadding / 2),
-          ...List.generate(
-            question.options!.length,
-            (index) => Option(
-              index: index,
-              text: question.options![index],
-              press: () => _controller.checkAns(question, index),
-            ),
-          ),
+          const SizedBox(height: kDefaultPadding / 2),
+          // ...List.generate(
+          //   question.!.length,
+          //   (index) => Option(
+          //     index: index,
+          //     text: question.options![index],
+          //     press: () => _controller.checkAns(question, index),
+          //   ),
+          // ),
         ],
       ),
     );
