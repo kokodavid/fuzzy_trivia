@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:math' as m;
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,16 +11,41 @@ import '../../../models/trivia_model.dart';
 import 'option.dart';
 
 class QuestionCard extends StatelessWidget {
-  const QuestionCard({
+ QuestionCard({
     Key? key,
     required this.question,
   }) : super(key: key);
 
   final Questions question;
 
+  List shuffle(List items) {
+    var random = m.Random();
+
+    // Go through all elements.
+    for (var i = items.length - 1; i > 0; i--) {
+      // Pick a pseudorandom number according to the list length
+      var n = random.nextInt(i + 1);
+
+      var temp = items[i];
+      items[i] = items[n];
+      items[n] = temp;
+    }
+
+    return items;
+  }
+
+  List<String> allAnswers = [];
+
+  List<String> shuffledAns = [];
+
   @override
   Widget build(BuildContext context) {
-    QuestionController _controller = Get.put(QuestionController());
+    QuestionController controller = Get.put(QuestionController());
+
+    allAnswers = [...?question.incorrectAnswers, question.correctAnswer!];
+
+     shuffledAns = [...shuffle(allAnswers)];
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
       padding: const EdgeInsets.all(kDefaultPadding),
@@ -35,12 +63,31 @@ class QuestionCard extends StatelessWidget {
                 ?.copyWith(color: kBlackColor),
           ),
           const SizedBox(height: kDefaultPadding / 2),
+          Expanded(
+            child: ListView.builder(
+              itemCount: 4,
+              itemBuilder: (BuildContext context, index) {
+                // shuffledAns = [...shuffle(shuffledAns)];
+
+                // ignore: avoid_single_cascade_in_expression_statements
+
+                log("ANSWER ===> ${question.correctAnswer}");
+                log("SHUFFLED ANSWERS ===> $shuffledAns");
+
+                return Option(
+                  text: shuffledAns[index],
+                  index: index,
+                );
+              },
+            ),
+          )
+
           // ...List.generate(
-          //   question.!.length,
+          //   4,
           //   (index) => Option(
           //     index: index,
-          //     text: question.options![index],
-          //     press: () => _controller.checkAns(question, index),
+          //     text: alllAnswers[index]
+          //     // press: () => _controller.checkAns(question.correctAnswer, index),
           //   ),
           // ),
         ],

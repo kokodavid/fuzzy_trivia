@@ -7,7 +7,6 @@ import '../../controllers/question_controller.dart';
 import '../quiz/quiz_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
-  QuestionController _controller = Get.put(QuestionController());
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +41,7 @@ class WelcomeScreen extends StatelessWidget {
                   const Spacer(), // 1/6
                   InkWell(
                     onTap: () async {
-                      await _controller.fetchQuestions();
+                      await Get.put(QuestionController()).fetchQuestions();
                       Get.to(QuizScreen());
                     },
                     child: Container(

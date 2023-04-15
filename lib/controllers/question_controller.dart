@@ -18,10 +18,13 @@ class QuestionController extends GetxController
 
   late AnimationController _animationController;
   late Animation _animation;
+  late Questions questionModel;
+
   // so that we can access our animation outside
   Animation get animation => this._animation;
 
   late PageController _pageController;
+
   PageController get pageController => this._pageController;
 
   List<dynamic> _questionList = [];
@@ -60,7 +63,7 @@ class QuestionController extends GetxController
     // Our animation duration is 60 s
     // so our plan is to fill the progress bar within 60s
     _animationController =
-        AnimationController(duration: const Duration(seconds: 1000), vsync: this);
+        AnimationController(duration: const Duration(seconds: 10), vsync: this);
     _animation = Tween<double>(begin: 0, end: 1).animate(_animationController)
       ..addListener(() {
         // update like setState
@@ -85,7 +88,7 @@ class QuestionController extends GetxController
   Future<void> fetchQuestions() async {
     final response = await http.get(
       Uri.parse(
-          'https://the-trivia-api.com/api/questions?limit=12&difficulty=medium'),
+          'https://the-trivia-api.com/api/questions?limit=15&difficulty=medium'),
     );
     if (response.statusCode == 200) {
       final jsonBody = json.decode(response.body);
@@ -94,11 +97,16 @@ class QuestionController extends GetxController
           .map((jsonQuestion) => Questions.fromJson(jsonQuestion))
           .toList();
       _questionList = questions;
+      update();
 
       log(_questionList.toString());
     } else {
       throw Exception('Failed to load questions');
     }
+  }
+
+  shuffleAnswers(){
+    
   }
 
   void checkAns(Question question, int selectedIndex) {
@@ -120,10 +128,11 @@ class QuestionController extends GetxController
   }
 
   void nextQuestion() {
-    if (_questionNumber.value != _questions.length) {
+    if (_questionNumber.value != _questionList.length) {
       _isAnswered = false;
+
       _pageController.nextPage(
-          duration: Duration(milliseconds: 10), curve: Curves.ease);
+          duration: Duration(milliseconds: 1000), curve: Curves.ease);
 
       // Reset the counter
       _animationController.reset();
