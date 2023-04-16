@@ -25,13 +25,13 @@ class ScoreScreen extends StatelessWidget {
                     ?.copyWith(color: kSecondaryColor),
               ),
               Spacer(),
-              // Text(
-              //   "${_qnController.correctAns * 10}/${_qnController.questions.length * 10}",
-              //   style: Theme.of(context)
-              //       .textTheme
-              //       .headline4
-              //       ?.copyWith(color: kSecondaryColor),
-              // ),
+              Text(
+                "${_qnController.numOfCorrectAns * 10}/${_qnController.questionList.length * 10}",
+                style: Theme.of(context)
+                    .textTheme
+                    .headline4
+                    ?.copyWith(color: kSecondaryColor),
+              ),
               Spacer(flex: 3),
             ],
           )

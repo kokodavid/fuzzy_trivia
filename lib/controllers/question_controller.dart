@@ -44,11 +44,11 @@ class QuestionController extends GetxController
   bool _isAnswered = false;
   bool get isAnswered => this._isAnswered;
 
-  late int _correctAns;
-  int get correctAns => this._correctAns;
+  late String _correctAns;
+  String get correctAns => this._correctAns;
 
-  late int _selectedAns;
-  int get selectedAns => this._selectedAns;
+  late String _selectedAns;
+  String get selectedAns => this._selectedAns;
 
   // for more about obs please check documentation
   RxInt _questionNumber = 1.obs;
@@ -105,15 +105,13 @@ class QuestionController extends GetxController
     }
   }
 
-  shuffleAnswers(){
-    
-  }
-
-  void checkAns(Question question, int selectedIndex) {
+  void checkAns(String answer, String selectedAnswer) {
     // because once user press any option then it will run
     _isAnswered = true;
-    _correctAns = question.answer!;
-    _selectedAns = selectedIndex;
+    _correctAns = answer;
+    _selectedAns = selectedAnswer;
+
+    log(_selectedAns);
 
     if (_correctAns == _selectedAns) _numOfCorrectAns++;
 

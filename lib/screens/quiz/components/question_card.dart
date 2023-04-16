@@ -76,7 +76,9 @@ class QuestionCard extends StatelessWidget {
 
                 return Option(
                   text: shuffledAns[index],
-                  index: index,
+                  number: index,
+                  index: shuffledAns.elementAt(index),
+                  press: ()=> controller.checkAns(question.correctAnswer!, shuffledAns.elementAt(index)),
                 );
               },
             ),

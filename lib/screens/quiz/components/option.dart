@@ -9,10 +9,12 @@ class Option extends StatelessWidget {
     Key? key,
     this.text,
     this.index,
+    this.number,
     this.press,
   }) : super(key: key);
   final String? text;
-  final int? index;
+  final String? index;
+  final int? number;
   final VoidCallback? press;
 
   @override
@@ -49,7 +51,7 @@ class Option extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "${index! + 1}. $text",
+                    "${number! + 1}. $text",
                     style: TextStyle(color: getTheRightColor(), fontSize: 16),
                   ),
                   Container(
