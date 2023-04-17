@@ -39,6 +39,8 @@ dependencies:
   # to handle SVGs for Android, iOS, and Web
   flutter_svg: ^0.21.0+1
   http: ^0.13.5
+  change_app_package_name: ^1.1.0
+  firebase_core: ^2.9.0
 
   # state management, intelligent dependency injection, and route management
   get: ^4.1.4

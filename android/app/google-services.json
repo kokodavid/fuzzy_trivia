@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "970701432670",
+    "project_id": "fuzzytrivia-ebad8",
+    "storage_bucket": "fuzzytrivia-ebad8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:970701432670:android:758b787e7778d6ba5491cf",
+        "android_client_info": {
+          "package_name": "com.giglab.fuzzytrivia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "970701432670-7huj8g2678jf4mcm0130apm4fgd6akuh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXIoHHGGv3H-VZlROHjh-EyPh9mXZo-OQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "970701432670-7huj8g2678jf4mcm0130apm4fgd6akuh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
