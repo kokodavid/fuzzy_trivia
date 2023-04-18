@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../constants.dart';
-import '../../controllers/question_controller.dart';
+import '../../questions/controller/question_controller.dart';
 
 class ScoreScreen extends StatelessWidget {
   @override

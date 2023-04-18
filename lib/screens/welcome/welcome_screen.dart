@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fuzzy_trivia/auth/ui/register_page.dart';
 import 'package:get/get.dart';
 
 import '../../constants.dart';
-import '../../controllers/question_controller.dart';
+import '../../questions/controller/question_controller.dart';
 import '../quiz/quiz_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,13 +28,49 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                   const Text("Enter your informations below"),
                   const Spacer(), // 1/6
-                  const TextField(
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Color(0xFF1C2341),
-                      hintText: "Full Name",
-                      border: OutlineInputBorder(
+                  InkWell(
+                    onTap: () async {
+                      await Get.put(QuestionController()).fetchQuestions();
+                      Get.to(QuizScreen());
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      alignment: Alignment.center,
+                      padding:
+                          const EdgeInsets.all(kDefaultPadding * 0.75), // 15
+                      decoration: const BoxDecoration(
+                        gradient: kPrimaryGradient,
                         borderRadius: BorderRadius.all(Radius.circular(12)),
+                      ),
+                      child: Text(
+                        "Single Player",
+                        style: Theme.of(context)
+                            .textTheme
+                            .button
+                            ?.copyWith(color: Colors.black),
+                      ),
+                    ),
+                  ),
+                  const Spacer(), // 1/6
+                  InkWell(
+                    onTap: () async {
+                      Get.to(RegisterPage());
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      alignment: Alignment.center,
+                      padding:
+                          const EdgeInsets.all(kDefaultPadding * 0.75), // 15
+                      decoration: const BoxDecoration(
+                        gradient: kPrimaryGradient,
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                      ),
+                      child: Text(
+                        "MultiPlayer",
+                        style: Theme.of(context)
+                            .textTheme
+                            .button
+                            ?.copyWith(color: Colors.black),
                       ),
                     ),
                   ),

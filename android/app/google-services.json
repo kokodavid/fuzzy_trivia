@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "970701432670-7huj8g2678jf4mcm0130apm4fgd6akuh.apps.googleusercontent.com",
+          "client_id": "970701432670-081e6qoms1r4clr6n2o4kqdr9srd4slm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.giglab.fuzzytrivia",
+            "certificate_hash": "2e3c4bd77432a2e2c75c9710e0be38be9f99d075"
+          }
+        },
+        {
+          "client_id": "970701432670-8oso8tvv57k8tontj0pjluj3d5ft4d5a.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

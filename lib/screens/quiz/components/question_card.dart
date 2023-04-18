@@ -5,9 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../constants.dart';
-import '../../../controllers/question_controller.dart';
-import '../../../models/Questions.dart';
-import '../../../models/trivia_model.dart';
+import '../../../questions/controller/question_controller.dart';
+import '../../../questions/data/model/qustions_model.dart';
 import 'option.dart';
 
 class QuestionCard extends StatelessWidget {
@@ -83,15 +82,7 @@ class QuestionCard extends StatelessWidget {
               },
             ),
           )
-
-          // ...List.generate(
-          //   4,
-          //   (index) => Option(
-          //     index: index,
-          //     text: alllAnswers[index]
-          //     // press: () => _controller.checkAns(question.correctAnswer, index),
-          //   ),
-          // ),
+     
         ],
       ),
     );
