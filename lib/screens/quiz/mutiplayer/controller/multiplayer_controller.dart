@@ -1,15 +1,38 @@
+import 'dart:async';
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fuzzy_trivia/screens/quiz/mutiplayer/repository/multiplayer_repository.dart';
 import 'package:get/get.dart';
 
 class MultiplayerController extends GetxController {
   final MultiPlayerRepository _multiPlayerRepository = MultiPlayerRepository();
+  StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? _gameRoomSubscription;
+
 
   int? rooms;
+  String? status;
+  String? roomId;
 
-  void createNewGameRoom(String hostId) async {
-    await _multiPlayerRepository.createGameRoom(hostId);
+  createNewGameRoom(String hostId) async {
+    try {
+      String? result = await _multiPlayerRepository.createGameRoom(hostId);
+      roomId = result;
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  getRoomData(roomId) async {
+    DocumentSnapshot<Map<String, dynamic>> gameRoomSnapshot =
+        await _multiPlayerRepository.getGameRoomData(roomId);  
+
+      Map<String, dynamic>? gameRoomData = gameRoomSnapshot.data();     
+
+
+    String? result = gameRoomData?['status'];
+    status = result!;
+    log(status.toString());
   }
 
   void joinGame(roomId, playerId) async {
@@ -21,7 +44,7 @@ class MultiplayerController extends GetxController {
     rooms = result;
   }
 
-  updateGameStatus(roomId) {
-    _multiPlayerRepository.updateRoomStatus(roomId);
+  updateGameStatus(roomId) async {
+    await _multiPlayerRepository.updateRoomStatus(roomId);
   }
 }

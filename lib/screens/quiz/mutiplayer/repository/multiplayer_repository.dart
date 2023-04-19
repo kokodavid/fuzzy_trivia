@@ -1,24 +1,23 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MultiPlayerRepository {
-  Future<void> createGameRoom(String hostId) async {
+  Future<String?> createGameRoom(String hostId) async {
     String roomId = generateRandomRoomId();
-    Map<String, dynamic> scores = {
-      hostId:'',
-    };
+
+    Map<String, dynamic> players = {"HostId": hostId, "Player2": ""};
 
     await FirebaseFirestore.instance.collection('gameRooms').doc(roomId).set({
       'room_Id': roomId,
       'hostId': hostId,
       'createdAt': FieldValue.serverTimestamp(),
       'status': 'waiting',
-      'players': [hostId],
-      'scores':scores
+      'players': players,
     });
 
-    return;
+    return roomId;
   }
 
   Future<void> joinGameRoom(String roomId, String playerId) async {
@@ -26,7 +25,7 @@ class MultiPlayerRepository {
         .collection('gameRooms')
         .doc(roomId)
         .update({
-      'players': FieldValue.arrayUnion([playerId]),
+      'players.Player2': playerId,
     });
   }
 
@@ -46,6 +45,21 @@ class MultiPlayerRepository {
         .get();
 
     return snapshot.docs.length;
+  }
+
+  Future<DocumentSnapshot<Map<String, dynamic>>> getGameRoomData(
+      String roomId) async {
+    DocumentReference<Map<String, dynamic>> gameRoomRef =
+        FirebaseFirestore.instance.collection('gameRooms').doc(roomId);
+
+    DocumentSnapshot<Map<String, dynamic>> gameRoomSnapshot =
+        await gameRoomRef.get();
+
+    if (gameRoomSnapshot.exists) {
+      return gameRoomSnapshot;
+    } else {
+      throw Exception('Game room not found!');
+    }
   }
 
   Future<void> uploadScores(String playerName, int score) async {

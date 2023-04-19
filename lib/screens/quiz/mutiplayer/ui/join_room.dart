@@ -62,7 +62,7 @@ class _JoinGameDialogState extends State<JoinGameDialog> {
                 _multiPlayerController.joinGame(
                     _roomId, _authController.user.value!.uid);
                 _multiPlayerController.updateGameStatus(_roomId);
-                Get.to(const LobbyScreen());
+                Get.to(LobbyScreen(roomId: _roomId,));
               }
             }
           },

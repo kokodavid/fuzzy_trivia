@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:fuzzy_trivia/auth/controller/auth_controller.dart';
 import 'package:fuzzy_trivia/screens/quiz/mutiplayer/controller/multiplayer_controller.dart';
@@ -23,11 +25,15 @@ class MultiPlayerScreen extends StatelessWidget {
             children: [
               Text("Hello ${_authController.user.value!.displayName!}"),
               GestureDetector(
-                onTap: () {
-                  _multiplayerController
+                onTap: () async {
+                  await _multiplayerController
                       .createNewGameRoom(_authController.user.value!.uid);
-                      Get.to(const LobbyScreen());
-    
+
+                  await _multiplayerController.getRoomData(_multiplayerController.roomId,);
+                  Get.to(LobbyScreen(
+                    roomId: _multiplayerController.roomId,
+                  ));
+                  log(_multiplayerController.roomId!);
                 },
                 child: Container(
                   decoration: const BoxDecoration(color: Colors.red),
