@@ -4,7 +4,17 @@ import 'package:get/get.dart';
 import '../../questions/controller/question_controller.dart';
 import 'components/body.dart';
 
-class QuizScreen extends StatelessWidget {
+class QuizScreen extends StatefulWidget {
+  @override
+  State<QuizScreen> createState() => _QuizScreenState();
+}
+
+class _QuizScreenState extends State<QuizScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     QuestionController _controller = Get.put(QuestionController());
@@ -15,7 +25,7 @@ class QuizScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
-          // FlatButton(onPressed: _controller.nextQuestion, child: Text("Skip")),
+          // ElevatedButton(onPressed: _controller.nextQuestion, child: Text("Skip")),
         ],
       ),
       body: Body(),

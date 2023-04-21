@@ -2,13 +2,15 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fuzzy_trivia/questions/controller/question_controller.dart';
 import 'package:fuzzy_trivia/screens/quiz/mutiplayer/repository/multiplayer_repository.dart';
+import 'package:fuzzy_trivia/screens/quiz/quiz_screen.dart';
 import 'package:get/get.dart';
 
 class MultiplayerController extends GetxController {
   final MultiPlayerRepository _multiPlayerRepository = MultiPlayerRepository();
-  StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? _gameRoomSubscription;
-
+  StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>?
+      _gameRoomSubscription;
 
   int? rooms;
   String? status;
@@ -25,14 +27,18 @@ class MultiplayerController extends GetxController {
 
   getRoomData(roomId) async {
     DocumentSnapshot<Map<String, dynamic>> gameRoomSnapshot =
-        await _multiPlayerRepository.getGameRoomData(roomId);  
+        await _multiPlayerRepository.getGameRoomData(roomId);
 
-      Map<String, dynamic>? gameRoomData = gameRoomSnapshot.data();     
-
+    Map<String, dynamic>? gameRoomData = gameRoomSnapshot.data();
 
     String? result = gameRoomData?['status'];
     status = result!;
     log(status.toString());
+  }
+
+  readyToStartGame() async {
+    await Get.put(QuestionController()).fetchQuestions();
+    QuizScreen();
   }
 
   void joinGame(roomId, playerId) async {

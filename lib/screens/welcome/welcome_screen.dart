@@ -73,31 +73,7 @@ class WelcomeScreen extends StatelessWidget {
                             ?.copyWith(color: Colors.black),
                       ),
                     ),
-                  ),
-                  const Spacer(), // 1/6
-                  InkWell(
-                    onTap: () async {
-                      await Get.put(QuestionController()).fetchQuestions();
-                      Get.to(QuizScreen());
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      alignment: Alignment.center,
-                      padding:
-                          const EdgeInsets.all(kDefaultPadding * 0.75), // 15
-                      decoration: const BoxDecoration(
-                        gradient: kPrimaryGradient,
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
-                      ),
-                      child: Text(
-                        "Lets Start Quiz",
-                        style: Theme.of(context)
-                            .textTheme
-                            .button
-                            ?.copyWith(color: Colors.black),
-                      ),
-                    ),
-                  ),
+                  ),                  
                   const Spacer(flex: 2), // it will take 2/6 spaces
                 ],
               ),

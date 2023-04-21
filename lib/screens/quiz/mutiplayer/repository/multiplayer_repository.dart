@@ -8,6 +8,8 @@ class MultiPlayerRepository {
     String roomId = generateRandomRoomId();
 
     Map<String, dynamic> players = {"HostId": hostId, "Player2": ""};
+    Map<String, dynamic> scores = {"host": "0", "Player2": "0"};
+
 
     await FirebaseFirestore.instance.collection('gameRooms').doc(roomId).set({
       'room_Id': roomId,
@@ -15,6 +17,9 @@ class MultiPlayerRepository {
       'createdAt': FieldValue.serverTimestamp(),
       'status': 'waiting',
       'players': players,
+      'turn':hostId,
+      'scores':scores
+
     });
 
     return roomId;

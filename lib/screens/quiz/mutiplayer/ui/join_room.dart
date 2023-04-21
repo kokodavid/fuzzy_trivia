@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fuzzy_trivia/auth/controller/auth_controller.dart';
+import 'package:fuzzy_trivia/questions/controller/question_controller.dart';
 import 'package:fuzzy_trivia/screens/lobby/lobby_screen.dart';
 import 'package:fuzzy_trivia/screens/quiz/mutiplayer/controller/multiplayer_controller.dart';
 import 'package:get/get.dart';
@@ -18,6 +19,7 @@ class _JoinGameDialogState extends State<JoinGameDialog> {
   late String _roomId;
   final MultiplayerController _multiPlayerController = MultiplayerController();
   final AuthController _authController = Get.put(AuthController());
+  final QuestionController _quizController = QuestionController();
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +64,10 @@ class _JoinGameDialogState extends State<JoinGameDialog> {
                 _multiPlayerController.joinGame(
                     _roomId, _authController.user.value!.uid);
                 _multiPlayerController.updateGameStatus(_roomId);
-                Get.to(LobbyScreen(roomId: _roomId,));
+                _quizController.fetchQuestions();
+                Get.to(LobbyScreen(
+                  roomId: _roomId,
+                ));
               }
             }
           },
