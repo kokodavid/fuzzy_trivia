@@ -34,6 +34,24 @@ class MultiPlayerRepository {
     });
   }
 
+  Future<void> uploadHostScores(String roomId, String hostScore) async {
+    await FirebaseFirestore.instance
+        .collection('gameRooms')
+        .doc(roomId)
+        .update({
+          'scores.host':hostScore,
+    });
+  }
+
+   Future<void> uploadPlayer2Scores(String roomId, String player2) async {
+    await FirebaseFirestore.instance
+        .collection('gameRooms')
+        .doc(roomId)
+        .update({
+          'scores.Player2':player2
+    });
+  }
+
   Future<void> updateRoomStatus(String roomId) async {
     CollectionReference gameRooms =
         FirebaseFirestore.instance.collection('gameRooms');
@@ -64,26 +82,6 @@ class MultiPlayerRepository {
       return gameRoomSnapshot;
     } else {
       throw Exception('Game room not found!');
-    }
-  }
-
-  Future<void> uploadScores(String playerName, int score) async {
-    try {
-      CollectionReference scoresCollection =
-          FirebaseFirestore.instance.collection('scores');
-
-      DocumentReference newScoreDocRef = scoresCollection.doc();
-
-      Map<String, dynamic> newScoreDoc = {
-        'playerName': playerName,
-        'score': score,
-      };
-
-      await newScoreDocRef.set(newScoreDoc);
-
-      print('Score uploaded successfully!');
-    } catch (e) {
-      print('Error uploading score: $e');
     }
   }
 

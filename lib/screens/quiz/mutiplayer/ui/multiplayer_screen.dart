@@ -29,7 +29,9 @@ class MultiPlayerScreen extends StatelessWidget {
                   await _multiplayerController
                       .createNewGameRoom(_authController.user.value!.uid);
 
-                  await _multiplayerController.getRoomData(_multiplayerController.roomId,);
+                  await _multiplayerController.getRoomData(
+                    _multiplayerController.roomId,
+                  );
                   Get.to(LobbyScreen(
                     roomId: _multiplayerController.roomId,
                   ));

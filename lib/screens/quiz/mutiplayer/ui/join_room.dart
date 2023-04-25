@@ -64,7 +64,6 @@ class _JoinGameDialogState extends State<JoinGameDialog> {
                 _multiPlayerController.joinGame(
                     _roomId, _authController.user.value!.uid);
                 _multiPlayerController.updateGameStatus(_roomId);
-                _quizController.fetchQuestions();
                 Get.to(LobbyScreen(
                   roomId: _roomId,
                 ));

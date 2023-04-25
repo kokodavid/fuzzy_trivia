@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
@@ -20,7 +22,7 @@ class AuthController extends GetxController {
         user.value = currentUser;
       }
     } catch (e) {
-      print(e);
+      log(e.toString());
     }
   }
 
@@ -33,7 +35,7 @@ class AuthController extends GetxController {
         Get.snackbar('Error', 'Unable to sign in with Google.');
       }
     } catch (e) {
-      print(e);
+      log(e.toString());
       Get.snackbar('Error', 'Unable to sign in with Google.');
     }
   }
@@ -43,7 +45,7 @@ class AuthController extends GetxController {
       await _authRepository.signOut();
       user.value = null;
     } catch (e) {
-      print(e);
+      log(e.toString());
     }
   }
 }

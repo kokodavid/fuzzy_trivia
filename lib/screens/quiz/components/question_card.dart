@@ -10,12 +10,18 @@ import '../../../questions/data/model/qustions_model.dart';
 import 'option.dart';
 
 class QuestionCard extends StatelessWidget {
- QuestionCard({
-    Key? key,
-    required this.question,
-  }) : super(key: key);
+  QuestionCard(
+      {Key? key,
+      required this.question,
+      required this.mode,
+      this.player,
+      this.roomId})
+      : super(key: key);
 
   final Questions question;
+  final String? mode;
+  final String? player;
+  final String? roomId;
 
   List shuffle(List items) {
     var random = m.Random();
@@ -43,7 +49,11 @@ class QuestionCard extends StatelessWidget {
 
     allAnswers = [...?question.incorrectAnswers, question.correctAnswer!];
 
-     shuffledAns = [...shuffle(allAnswers)];
+    shuffledAns = [...shuffle(allAnswers)];
+
+      log("=====> Mode $mode");
+      log("=====> Player $player");
+      log("=====> roomId $roomId");
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
@@ -58,7 +68,7 @@ class QuestionCard extends StatelessWidget {
             question.question!,
             style: Theme.of(context)
                 .textTheme
-                .headline6
+                .titleLarge
                 ?.copyWith(color: kBlackColor),
           ),
           const SizedBox(height: kDefaultPadding / 2),
@@ -66,23 +76,20 @@ class QuestionCard extends StatelessWidget {
             child: ListView.builder(
               itemCount: 4,
               itemBuilder: (BuildContext context, index) {
-                // shuffledAns = [...shuffle(shuffledAns)];
-
-                // ignore: avoid_single_cascade_in_expression_statements
-
-                log("ANSWER ===> ${question.correctAnswer}");
-                log("SHUFFLED ANSWERS ===> $shuffledAns");
-
                 return Option(
                   text: shuffledAns[index],
                   number: index,
                   index: shuffledAns.elementAt(index),
-                  press: ()=> controller.checkAns(question.correctAnswer!, shuffledAns.elementAt(index)),
+                  press: () => mode != 'multiplayer'
+                      ? controller.checkAns(
+                          question.correctAnswer!, shuffledAns.elementAt(index))
+                      : player == 'host' ? controller.checkAnsAndUpload(question.correctAnswer!,
+                          shuffledAns.elementAt(index), roomId):controller.checkPlayer2AnsAndUpload(question.correctAnswer!,
+                          shuffledAns.elementAt(index), roomId),
                 );
               },
             ),
           )
-     
         ],
       ),
     );

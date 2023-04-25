@@ -1,34 +1,37 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-import '../../questions/controller/question_controller.dart';
+import 'package:flutter/material.dart';
 import 'components/body.dart';
 
 class QuizScreen extends StatefulWidget {
+  const QuizScreen({Key? key, required this.mode, this.player, this.roomId})
+      : super(key: key);
+
+  final String? mode;
+  final String? player;
+  final String? roomId;
+
   @override
   State<QuizScreen> createState() => _QuizScreenState();
 }
 
 class _QuizScreenState extends State<QuizScreen> {
-
-  @override
-  void initState() {
-    super.initState();
-  }
   @override
   Widget build(BuildContext context) {
-    QuestionController _controller = Get.put(QuestionController());
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         // Fluttter show the back button automatically
         backgroundColor: Colors.transparent,
         elevation: 0,
-        actions: [
+        actions: const [
           // ElevatedButton(onPressed: _controller.nextQuestion, child: Text("Skip")),
         ],
       ),
-      body: Body(),
+      body: Body(
+        mode: widget.mode,
+        player: widget.player,
+        roomId: widget.roomId,
+      ),
     );
   }
 }

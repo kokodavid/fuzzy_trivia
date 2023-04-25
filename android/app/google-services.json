@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "970701432670-96e4qnr1kpn8mev86pfen0sbotoubfsl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.giglab.fuzzytrivia",
+            "certificate_hash": "2b5c95bec06fb9d5733a65b5ee52030df6cc8845"
+          }
+        },
+        {
           "client_id": "970701432670-8oso8tvv57k8tontj0pjluj3d5ft4d5a.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -18,7 +20,7 @@ class AuthRepository {
 
       return await _firebaseAuth.signInWithCredential(credential);
     } catch (e) {
-      print(e);
+      log(e.toString());
       return null;
     }
   }
@@ -28,7 +30,7 @@ class AuthRepository {
       await _firebaseAuth.signOut();
       await _googleSignIn.signOut();
     } catch (e) {
-      print(e);
+      log(e.toString());
     }
   }
 

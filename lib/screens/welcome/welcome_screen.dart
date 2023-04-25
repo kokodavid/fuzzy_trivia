@@ -8,6 +8,7 @@ import '../../questions/controller/question_controller.dart';
 import '../quiz/quiz_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
+  final String? mode = 'single';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,8 +31,7 @@ class WelcomeScreen extends StatelessWidget {
                   const Spacer(), // 1/6
                   InkWell(
                     onTap: () async {
-                      await Get.put(QuestionController()).fetchQuestions();
-                      Get.to(QuizScreen());
+                      Get.to(QuizScreen(mode: mode));
                     },
                     child: Container(
                       width: double.infinity,
@@ -73,7 +73,7 @@ class WelcomeScreen extends StatelessWidget {
                             ?.copyWith(color: Colors.black),
                       ),
                     ),
-                  ),                  
+                  ),
                   const Spacer(flex: 2), // it will take 2/6 spaces
                 ],
               ),
