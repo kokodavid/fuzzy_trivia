@@ -3,7 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/widgets.dart';
 import 'package:fuzzy_trivia/questions/data/model/qustions_model.dart';
-import 'package:fuzzy_trivia/screens/quiz/mutiplayer/repository/multiplayer_repository.dart';
+import 'package:fuzzy_trivia/premium_features/mutiplayer/repository/multiplayer_repository.dart';
 import 'package:get/get.dart';
 
 import 'package:http/http.dart' as http;
@@ -12,7 +12,8 @@ import '../../screens/score/score_screen.dart';
 
 class QuestionController extends GetxController
     // ignore: deprecated_member_use
-    with SingleGetTickerProviderMixin {
+    with
+        SingleGetTickerProviderMixin {
   final MultiPlayerRepository _multiPlayerRepository = MultiPlayerRepository();
 
   late AnimationController _animationController;
@@ -49,7 +50,7 @@ class QuestionController extends GetxController
   @override
   void onInit() {
     _animationController =
-        AnimationController(duration: const Duration(seconds: 10), vsync: this);
+        AnimationController(duration: const Duration(seconds: 15), vsync: this);
     _animation = Tween<double>(begin: 0, end: 1).animate(_animationController)
       ..addListener(() {
         update();
@@ -87,9 +88,14 @@ class QuestionController extends GetxController
     }
   }
 
-  Future<List<Questions>> fetchPremiumQuestions() async {
+  Future<List<Questions>> fetchPremiumQuestions(
+      limit, category, difficulty) async {
+
+    log(limit.toString());
+    
     final response = await http.get(
-      Uri.parse('https://the-trivia-api.com/api/questions?limit=15'),
+      Uri.parse(
+          'https://the-trivia-api.com/api/questions?limit=$limit&categories=$category&difficulties=$difficulty'),
     );
     if (response.statusCode == 200) {
       final jsonBody = json.decode(response.body);
@@ -136,16 +142,18 @@ class QuestionController extends GetxController
     _animationController.stop();
     update();
 
-        _multiPlayerRepository.uploadHostScores(roomId, _numOfCorrectAns.toString());
+    _multiPlayerRepository.uploadHostScores(
+        roomId, _numOfCorrectAns.toString());
 
-    _multiPlayerRepository.uploadHostScores(roomId,  _numOfCorrectAns.toString());
+    _multiPlayerRepository.uploadHostScores(
+        roomId, _numOfCorrectAns.toString());
 
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 3), () {
       nextQuestion();
     });
   }
 
-   checkPlayer2AnsAndUpload(String answer, String selectedAnswer, roomId) {
+  checkPlayer2AnsAndUpload(String answer, String selectedAnswer, roomId) {
     _isAnswered = true;
     _correctAns = answer;
     _selectedAns = selectedAnswer;
@@ -157,15 +165,13 @@ class QuestionController extends GetxController
     _animationController.stop();
     update();
 
-    _multiPlayerRepository.uploadPlayer2Scores(roomId, _numOfCorrectAns.toString());
+    _multiPlayerRepository.uploadPlayer2Scores(
+        roomId, _numOfCorrectAns.toString());
 
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 3), () {
       nextQuestion();
     });
   }
-
-
-
 
   void nextQuestion() {
     if (_questionNumber.value != _questionList.length) {

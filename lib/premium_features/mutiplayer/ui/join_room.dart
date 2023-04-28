@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fuzzy_trivia/auth/controller/auth_controller.dart';
 import 'package:fuzzy_trivia/questions/controller/question_controller.dart';
 import 'package:fuzzy_trivia/screens/lobby/lobby_screen.dart';
-import 'package:fuzzy_trivia/screens/quiz/mutiplayer/controller/multiplayer_controller.dart';
+import 'package:fuzzy_trivia/premium_features/mutiplayer/controller/multiplayer_controller.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 

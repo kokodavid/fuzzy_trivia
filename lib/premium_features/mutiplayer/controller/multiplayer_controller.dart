@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fuzzy_trivia/screens/quiz/mutiplayer/repository/multiplayer_repository.dart';
+import 'package:fuzzy_trivia/premium_features/mutiplayer/repository/multiplayer_repository.dart';
 import 'package:get/get.dart';
 
 class MultiplayerController extends GetxController {

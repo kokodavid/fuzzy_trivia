@@ -1,40 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:fuzzy_trivia/questions/data/model/qustions_model.dart';
-import 'package:get/get.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
-import '../../../constants.dart';
-import '../../../questions/controller/question_controller.dart';
-import 'progress_bar.dart';
-import 'question_card.dart';
+import '../../../../constants.dart';
+import '../../../../questions/controller/question_controller.dart';
+import '../../../../questions/data/model/qustions_model.dart';
+import '../../../../screens/quiz/components/progress_bar.dart';
+import '../../../../screens/quiz/components/question_card.dart';
 
-class Body extends StatefulWidget {
-  const Body({Key? key, required this.mode, required this.player, this.roomId})
+class PremiumBody extends StatefulWidget {
+  const PremiumBody({Key? key, required this.mode, required this.player, this.roomId,this.category,this.difficulty,this.questions})
       : super(key: key);
 
   final String? mode;
   final String? player;
   final String? roomId;
+  final String? category;
+  final String? difficulty;
+  final int? questions;
 
 
   @override
-  State<Body> createState() => _BodyState();
+  State<PremiumBody> createState() => _PremiumBodyState();
 }
 
-class _BodyState extends State<Body> {
+class _PremiumBodyState extends State<PremiumBody> {
+
   QuestionController questionController = Get.put(QuestionController());
 
   @override
-  void initState() {
-    
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    // So that we have acccess our controller
     return FutureBuilder<List<Questions>>(
-      future: questionController.fetchBasicQuestions(),
+      future: questionController.fetchPremiumQuestions(widget.questions,widget.category,widget.difficulty),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Stack(
@@ -100,6 +97,6 @@ class _BodyState extends State<Body> {
         }
         return const CircularProgressIndicator();
       },
-    );
+    ); 
   }
 }

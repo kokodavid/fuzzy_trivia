@@ -25,7 +25,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
   }
 
   final _mFirestore = FirebaseFirestore.instance;
-  final String? mode = 'multiplayer';
+  final String? mode = 'premium';
 
   @override
   Widget build(BuildContext context) {

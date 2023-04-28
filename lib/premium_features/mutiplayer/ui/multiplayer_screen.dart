@@ -2,10 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:fuzzy_trivia/auth/controller/auth_controller.dart';
-import 'package:fuzzy_trivia/screens/quiz/mutiplayer/controller/multiplayer_controller.dart';
+import 'package:fuzzy_trivia/premium_features/mutiplayer/controller/multiplayer_controller.dart';
 import 'package:get/get.dart';
 
-import '../../../lobby/lobby_screen.dart';
+import '../../../screens/lobby/lobby_screen.dart';
 import 'join_room.dart';
 
 class MultiPlayerScreen extends StatelessWidget {

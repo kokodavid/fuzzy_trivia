@@ -1,12 +1,14 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fuzzy_trivia/premium_features/profile/controller/profie_controller.dart';
 import 'package:get/get.dart';
 
 import '../repository/auth_repository.dart';
 
 class AuthController extends GetxController {
   final AuthRepository _authRepository = AuthRepository();
+  final ProfileController _profileController = ProfileController();
   Rx<User?> user = Rx<User?>(null);
 
   @override
@@ -20,6 +22,7 @@ class AuthController extends GetxController {
       final currentUser = _authRepository.getCurrentUser();
       if (currentUser != null) {
         user.value = currentUser;
+        _profileController.getUserData(user.value!.uid);
       }
     } catch (e) {
       log(e.toString());

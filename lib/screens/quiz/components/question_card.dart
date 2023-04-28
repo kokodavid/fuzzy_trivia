@@ -80,7 +80,7 @@ class QuestionCard extends StatelessWidget {
                   text: shuffledAns[index],
                   number: index,
                   index: shuffledAns.elementAt(index),
-                  press: () => mode != 'multiplayer'
+                  press: () => mode != 'premium'
                       ? controller.checkAns(
                           question.correctAnswer!, shuffledAns.elementAt(index))
                       : player == 'host' ? controller.checkAnsAndUpload(question.correctAnswer!,
