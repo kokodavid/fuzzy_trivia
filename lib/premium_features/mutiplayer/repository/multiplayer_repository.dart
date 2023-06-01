@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MultiPlayerRepository {
   
-  Future<String?> createGameRoom(String hostId) async {
+  Future<String?> createGameRoom(String hostId,String category,String difficulty,int limit) async {
     String roomId = generateRandomRoomId();
 
     Map<String, dynamic> players = {"HostId": hostId, "Player2": ""};
@@ -18,8 +18,11 @@ class MultiPlayerRepository {
       'createdAt': FieldValue.serverTimestamp(),
       'status': 'waiting',
       'players': players,
-      'turn':hostId,
-      'scores':scores
+      'scores':scores,
+      'category':category,
+      'limit':limit,
+      'difficulty':difficulty
+      
 
     });
 
@@ -70,6 +73,16 @@ class MultiPlayerRepository {
 
     return snapshot.docs.length;
   }
+
+    Future<bool> checkPlayerExists(String hostId) async {
+    final QuerySnapshot<Map<String, dynamic>> result = await FirebaseFirestore
+        .instance
+        .collection('gameRooms')
+        .where('hostId', isEqualTo: hostId)
+        .get();
+    return result.docs.isNotEmpty;
+  }
+
 
   Future<DocumentSnapshot<Map<String, dynamic>>> getGameRoomData(
       String roomId) async {

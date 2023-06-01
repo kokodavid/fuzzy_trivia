@@ -9,7 +9,14 @@ import '../../../../screens/quiz/components/progress_bar.dart';
 import '../../../../screens/quiz/components/question_card.dart';
 
 class PremiumBody extends StatefulWidget {
-  const PremiumBody({Key? key, required this.mode, required this.player, this.roomId,this.category,this.difficulty,this.questions})
+  const PremiumBody(
+      {Key? key,
+      required this.mode,
+      required this.player,
+      this.roomId,
+      this.category,
+      this.difficulty,
+      this.questions})
       : super(key: key);
 
   final String? mode;
@@ -19,84 +26,105 @@ class PremiumBody extends StatefulWidget {
   final String? difficulty;
   final int? questions;
 
-
   @override
   State<PremiumBody> createState() => _PremiumBodyState();
 }
 
 class _PremiumBodyState extends State<PremiumBody> {
-
   QuestionController questionController = Get.put(QuestionController());
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Questions>>(
-      future: questionController.fetchPremiumQuestions(widget.questions,widget.category,widget.difficulty),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Stack(
-            children: [
-              SvgPicture.asset("assets/icons/bg.svg", fit: BoxFit.fill),
-              SafeArea(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                      child: ProgressBar(),
-                    ),
-                    const SizedBox(height: kDefaultPadding),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: kDefaultPadding),
-                      child: Obx(
-                        () => Text.rich(
-                          TextSpan(
-                            text:
-                                "Question ${questionController.questionNumber.value}",
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineMedium
-                                ?.copyWith(color: kSecondaryColor),
-                            children: [
-                              TextSpan(
-                                text: "/${snapshot.data!.length}",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headlineSmall
-                                    ?.copyWith(color: kSecondaryColor),
+    return Container(
+      margin: const EdgeInsets.only(top: kToolbarHeight * 1.5),
+      color: secondaryGreen,
+      child: FutureBuilder<List<Questions>>(
+        future: widget.mode != 'random'
+            ? questionController.fetchPremiumQuestions(
+                widget.questions, widget.category, widget.difficulty)
+            : questionController.premiumRandomQuestions(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasData) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(right: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          icon: const Icon(
+                            Icons.arrow_back_ios_new,
+                            color: Colors.black,
+                          ),
+                          onPressed: () {
+                            Get.back();
+                          },
+                        ),
+                        Container(
+                          height: 30,
+                          width: 66,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Obx(
+                              () => Row(
+                                children: [
+                                  Text(
+                                    "${questionController.numOfCorrectAns * 10}",
+                                    style: const TextStyle(
+                                        color: Colors.black, fontSize: 16),
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Image.asset(
+                                    "assets/icons/puzzle.png",
+                                  )
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
+                      ],
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 10, left: 20, right: 20),
+                    child: ProgressBar(),
+                  ),
+                  const SizedBox(height: kDefaultPadding),
+                  const Divider(thickness: 1.5),
+                  const SizedBox(height: kDefaultPadding),
+                  Expanded(
+                    child: PageView.builder(
+                      // Block swipe to next qn
+                      physics: const NeverScrollableScrollPhysics(),
+                      controller: questionController.pageController,
+                      onPageChanged: questionController.updateTheQnNum,
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) => QuestionCard(
+                        mode: widget.mode,
+                        player: widget.player,
+                        question: snapshot.data![index],
+                        roomId: widget.roomId,
                       ),
                     ),
-                    const Divider(thickness: 1.5),
-                    const SizedBox(height: kDefaultPadding),
-                    Expanded(
-                      child: PageView.builder(
-                        // Block swipe to next qn
-                        physics: const NeverScrollableScrollPhysics(),
-                        controller: questionController.pageController,
-                        onPageChanged: questionController.updateTheQnNum,
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (context, index) => QuestionCard(
-                          mode: widget.mode,
-                          player: widget.player,
-                          question: snapshot.data![index],
-                          roomId: widget.roomId,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          );
-        }
-        return const CircularProgressIndicator();
-      },
-    ); 
+                  ),
+                ],
+              );
+            } else {
+              return const Text("FAiled");
+            }
+          } else {
+            return const CircularProgressIndicator();
+          }
+        },
+      ),
+    );
   }
 }

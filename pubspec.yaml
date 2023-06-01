@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+3
+version: 1.0.0+5
 
 environment:
   sdk: '>=2.19.3 <3.0.0'
@@ -37,7 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   # to handle SVGs for Android, iOS, and Web
-  flutter_svg: ^0.21.0+1
+  flutter_svg: any
   http: ^0.13.5
   change_app_package_name: ^1.1.0
   firebase_auth: ^4.4.1
@@ -49,21 +49,27 @@ dependencies:
   firebase_storage: ^11.1.1
   image_picker: ^0.8.7+4
   shared_preferences: ^2.1.0
+  random_avatar: any
+  url_launcher: ^6.1.11
+  flutter_spinkit: ^5.2.0
+  circular_profile_avatar: ^2.0.5
+  user_profile_avatar: ^0.1.2
+  
 
   # state management, intelligent dependency injection, and route management
   get: ^4.1.4
+  
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
-
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  flutter_launcher_icons: any
+  flutter_test:
+    sdk: flutter 
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/logo.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

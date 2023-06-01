@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/widgets.dart';
+import 'package:fuzzy_trivia/premium_features/profile/controller/profie_controller.dart';
 import 'package:fuzzy_trivia/questions/data/model/qustions_model.dart';
 import 'package:fuzzy_trivia/premium_features/mutiplayer/repository/multiplayer_repository.dart';
 import 'package:get/get.dart';
@@ -15,6 +16,7 @@ class QuestionController extends GetxController
     with
         SingleGetTickerProviderMixin {
   final MultiPlayerRepository _multiPlayerRepository = MultiPlayerRepository();
+  final ProfileController profileController = ProfileController();
 
   late AnimationController _animationController;
   late Animation _animation;
@@ -41,8 +43,11 @@ class QuestionController extends GetxController
   final RxInt _questionNumber = 1.obs;
   RxInt get questionNumber => _questionNumber;
 
-  int _numOfCorrectAns = 0;
-  int get numOfCorrectAns => _numOfCorrectAns;
+  late RxInt _numOfCorrectAns = 0.obs;
+  RxInt get numOfCorrectAns => _numOfCorrectAns;
+
+  late RxInt _answeredQuestions = 0.obs;
+  RxInt get answeredQuestions => _answeredQuestions;
 
   String? hostScore;
   String? player2Score;
@@ -51,11 +56,11 @@ class QuestionController extends GetxController
   void onInit() {
     _animationController =
         AnimationController(duration: const Duration(seconds: 15), vsync: this);
+
     _animation = Tween<double>(begin: 0, end: 1).animate(_animationController)
       ..addListener(() {
         update();
       });
-
     _animationController.forward().whenComplete(nextQuestion);
     _pageController = PageController();
     super.onInit();
@@ -88,11 +93,28 @@ class QuestionController extends GetxController
     }
   }
 
+  Future<List<Questions>> premiumRandomQuestions() async {
+    final response = await http.get(
+      Uri.parse('https://the-trivia-api.com/api/questions?limit=15'),
+    );
+    if (response.statusCode == 200) {
+      final jsonBody = json.decode(response.body);
+      final List<dynamic> jsonQuestions = jsonBody;
+      final List<Questions> questions = jsonQuestions
+          .map((jsonQuestion) => Questions.fromJson(jsonQuestion))
+          .toList();
+      _questionList = questions;
+      update();
+
+      log(_questionList.toString());
+      return questions;
+    } else {
+      throw Exception('Failed to load questions');
+    }
+  }
+
   Future<List<Questions>> fetchPremiumQuestions(
       limit, category, difficulty) async {
-
-    log(limit.toString());
-    
     final response = await http.get(
       Uri.parse(
           'https://the-trivia-api.com/api/questions?limit=$limit&categories=$category&difficulties=$difficulty'),
@@ -113,19 +135,21 @@ class QuestionController extends GetxController
     }
   }
 
-  void checkAns(String answer, String selectedAnswer) {
+  void checkAns(String answer, String selectedAnswer) async {
     _isAnswered = true;
     _correctAns = answer;
     _selectedAns = selectedAnswer;
 
-    log(_selectedAns);
-
     if (_correctAns == _selectedAns) _numOfCorrectAns++;
+
+    if (_correctAns == _selectedAns || _correctAns != _selectedAns) {
+      _answeredQuestions++;
+    }
 
     _animationController.stop();
     update();
 
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 1), () {
       nextQuestion();
     });
   }
@@ -173,18 +197,18 @@ class QuestionController extends GetxController
     });
   }
 
-  void nextQuestion() {
+  void nextQuestion() async {
     if (_questionNumber.value != _questionList.length) {
       _isAnswered = false;
 
       _pageController.nextPage(
-          duration: const Duration(milliseconds: 1000), curve: Curves.ease);
+          duration: const Duration(seconds: 2), curve: Curves.ease);
 
       _animationController.reset();
 
       _animationController.forward().whenComplete(nextQuestion);
     } else {
-      Get.to(const ScoreScreen());
+      Get.to(() => const ScoreScreen());
     }
   }
 

@@ -3,15 +3,23 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:fuzzy_trivia/auth/controller/auth_controller.dart';
 import 'package:fuzzy_trivia/premium_features/mutiplayer/controller/multiplayer_controller.dart';
+import 'package:fuzzy_trivia/premium_features/single_player/match_making/ui/matchmaking_screen.dart';
 import 'package:get/get.dart';
 
-import '../../../screens/lobby/lobby_screen.dart';
 import 'join_room.dart';
 
-class MultiPlayerScreen extends StatelessWidget {
-  MultiPlayerScreen({super.key});
+class MultiPlayerScreen extends StatefulWidget {
+  const MultiPlayerScreen({super.key, this.mode});
 
+    final String? mode;
+
+  @override
+  State<MultiPlayerScreen> createState() => _MultiPlayerScreenState();
+}
+
+class _MultiPlayerScreenState extends State<MultiPlayerScreen> {
   final AuthController _authController = Get.put(AuthController());
+
   final MultiplayerController _multiplayerController =
       Get.put(MultiplayerController());
 
@@ -26,16 +34,7 @@ class MultiPlayerScreen extends StatelessWidget {
               Text("Hello ${_authController.user.value!.displayName!}"),
               GestureDetector(
                 onTap: () async {
-                  await _multiplayerController
-                      .createNewGameRoom(_authController.user.value!.uid);
-
-                  await _multiplayerController.getRoomData(
-                    _multiplayerController.roomId,
-                  );
-                  Get.to(LobbyScreen(
-                    roomId: _multiplayerController.roomId,
-                  ));
-                  log(_multiplayerController.roomId!);
+                  Get.to( MatchmakingScreen(mode: widget.mode,));
                 },
                 child: Container(
                   decoration: const BoxDecoration(color: Colors.red),

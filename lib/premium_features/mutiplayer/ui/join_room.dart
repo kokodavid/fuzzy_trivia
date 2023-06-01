@@ -19,26 +19,34 @@ class _JoinGameDialogState extends State<JoinGameDialog> {
   late String _roomId;
   final MultiplayerController _multiPlayerController = MultiplayerController();
   final AuthController _authController = Get.put(AuthController());
-  final QuestionController _quizController = QuestionController();
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Join Game'),
-      content: Form(
-        key: _formKey,
-        child: TextFormField(
-          keyboardType: TextInputType.number,
-          decoration: const InputDecoration(labelText: 'Enter Room ID'),
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'Please enter a room ID';
-            }
-            return null;
-          },
-          onSaved: (value) {
-            _roomId = value!;
-          },
+      backgroundColor: Colors.white,
+      alignment: Alignment.center,
+      title: const Text(
+        'Join Game Room',
+        style: TextStyle(color: Colors.black),
+      ),
+      content: Container(
+        child: Form(
+          key: _formKey,
+          child: TextFormField(
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(
+              labelText: 'Enter Room ID',
+            ),
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please enter a room ID';
+              }
+              return null;
+            },
+            onSaved: (value) {
+              _roomId = value!;
+            },
+          ),
         ),
       ),
       actions: [
@@ -54,10 +62,13 @@ class _JoinGameDialogState extends State<JoinGameDialog> {
             if (_formKey.currentState!.validate()) {
               _formKey.currentState!.save();
               await _multiPlayerController.validateRoomId(_roomId);
+              await _multiPlayerController
+                  .verifyPlayer(_authController.user.value!.uid);
 
               if (_multiPlayerController.rooms == 0) {
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text('Invalid room ID'),
+                  content:
+                      Text('You are already in the lobby with another device'),
                   backgroundColor: Colors.red,
                 ));
               } else {

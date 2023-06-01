@@ -16,7 +16,6 @@ class Body extends StatefulWidget {
   final String? player;
   final String? roomId;
 
-
   @override
   State<Body> createState() => _BodyState();
 }
@@ -26,7 +25,6 @@ class _BodyState extends State<Body> {
 
   @override
   void initState() {
-    
     super.initState();
   }
 

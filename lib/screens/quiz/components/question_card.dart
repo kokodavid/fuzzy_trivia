@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:math' as m;
 
 import 'package:flutter/material.dart';
+import 'package:fuzzy_trivia/auth/controller/auth_controller.dart';
 import 'package:get/get.dart';
 
 import '../../../constants.dart';
@@ -46,14 +47,15 @@ class QuestionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     QuestionController controller = Get.put(QuestionController());
+    AuthController authController = Get.put(AuthController());
 
     allAnswers = [...?question.incorrectAnswers, question.correctAnswer!];
 
     shuffledAns = [...shuffle(allAnswers)];
 
-      log("=====> Mode $mode");
-      log("=====> Player $player");
-      log("=====> roomId $roomId");
+    log("=====> Mode $mode");
+    log("=====> Player $player");
+    log("=====> roomId $roomId");
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
@@ -64,28 +66,58 @@ class QuestionCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text(
-            question.question!,
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge
-                ?.copyWith(color: kBlackColor),
+          Container(
+            alignment: Alignment.topLeft,
+            child: Obx(
+              () => Text.rich(
+                TextSpan(
+                  text: "Question ${controller.questionNumber.value}",
+                  style: const TextStyle(fontSize: 16, color: primaryGreen),
+                  children: [
+                    TextSpan(
+                      text: " of ${controller.questionList.length}",
+                      style: const TextStyle(fontSize: 16, color: primaryGreen),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
-          const SizedBox(height: kDefaultPadding / 2),
+          const SizedBox(
+            height: 15,
+          ),
+          Container(
+            alignment: Alignment.topLeft,
+            child: Text(
+              question.question!,
+              textAlign: TextAlign.left,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(color: kBlackColor),
+            ),
+          ),
           Expanded(
             child: ListView.builder(
+              padding: EdgeInsets.zero,
               itemCount: 4,
               itemBuilder: (BuildContext context, index) {
                 return Option(
                   text: shuffledAns[index],
                   number: index,
                   index: shuffledAns.elementAt(index),
-                  press: () => mode != 'premium'
+                  press: () => mode != 'premium_multi'
                       ? controller.checkAns(
                           question.correctAnswer!, shuffledAns.elementAt(index))
-                      : player == 'host' ? controller.checkAnsAndUpload(question.correctAnswer!,
-                          shuffledAns.elementAt(index), roomId):controller.checkPlayer2AnsAndUpload(question.correctAnswer!,
-                          shuffledAns.elementAt(index), roomId),
+                      : player == 'host'
+                          ? controller.checkAnsAndUpload(
+                              question.correctAnswer!,
+                              shuffledAns.elementAt(index),
+                              roomId)
+                          : controller.checkPlayer2AnsAndUpload(
+                              question.correctAnswer!,
+                              shuffledAns.elementAt(index),
+                              roomId),
                 );
               },
             ),

@@ -1,14 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fuzzy_trivia/auth/ui/register_page.dart';
 import 'package:get/get.dart';
 
+import '../../auth/controller/auth_controller.dart';
 import '../../constants.dart';
 import '../../questions/controller/question_controller.dart';
 import '../quiz/quiz_screen.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
+  const WelcomeScreen({super.key});
+
+  @override
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen> {
+  final AuthController authController = Get.put(AuthController());
+
   final String? mode = 'single';
+
+  @override
+  void initState() {
+    checkUser();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,5 +100,10 @@ class WelcomeScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+
+  checkUser() async {
+    await authController.checkUserData(authController.user.value!.uid);
   }
 }

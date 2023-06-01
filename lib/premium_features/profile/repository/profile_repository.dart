@@ -5,8 +5,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class ProfileRepository {
-  Future<void> createUserProfile(
-      String userId, String username, int totalScore, bool isSubscribed,imageUrl) async {
+  
+  Future<void> createUserProfile(String userId, String username, int totalScore,
+      bool isSubscribed, imageUrl) async {
     try {
       Map<String, dynamic> profileData = {
         'username': username,
@@ -23,7 +24,7 @@ class ProfileRepository {
     }
   }
 
-   Future<DocumentSnapshot<Map<String, dynamic>>> getUserProfile(
+  Future<DocumentSnapshot<Map<String, dynamic>>> getUserProfile(
       String uid) async {
     DocumentReference<Map<String, dynamic>> gameRoomRef =
         FirebaseFirestore.instance.collection('profiles').doc(uid);
@@ -47,6 +48,15 @@ class ProfileRepository {
     return result.docs.isNotEmpty;
   }
 
+  Future<void> updateScores(String uid, int score) async {
+    CollectionReference gameRooms =
+        FirebaseFirestore.instance.collection('profiles');
+
+    gameRooms.doc(uid).update({
+      'total_score': score,
+    });
+  }
+
   Future<String?> uploadProfilePicture(File imageFile, String userId) async {
     try {
       Reference storageRef =
@@ -55,12 +65,6 @@ class ProfileRepository {
       TaskSnapshot snapshot = await uploadTask.whenComplete(() => null);
 
       String downloadUrl = await snapshot.ref.getDownloadURL();
-      // await FirebaseFirestore.instance
-      //     .collection('profiles')
-      //     .doc(userId)
-      //     .update({
-      //   'profile_picture_url': downloadUrl,
-      // });
       return downloadUrl;
     } catch (error) {
       log('Failed to upload profile picture: $error');
