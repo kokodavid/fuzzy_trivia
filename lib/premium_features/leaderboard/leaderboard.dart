@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fuzzy_trivia/auth/controller/auth_controller.dart';
 import 'package:fuzzy_trivia/constants.dart';
 import 'package:fuzzy_trivia/premium_features/leaderboard/leaderboard_controller.dart';
 import 'package:get/get.dart';
@@ -13,8 +14,9 @@ class LeaderboardPage extends StatefulWidget {
 }
 
 class _LeaderboardPageState extends State<LeaderboardPage> {
-  final LeaderboardController leaderboardController =
-      Get.put(LeaderboardController());
+  final LeaderboardController leaderboardController = Get.put(LeaderboardController());
+  final AuthController authController = Get.put(AuthController());
+    
 
   @override
   Widget build(BuildContext context) {

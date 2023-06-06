@@ -2,6 +2,7 @@ import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:fuzzy_trivia/premium_features/leaderboard/leaderboard.dart';
 import 'package:fuzzy_trivia/premium_features/profile/controller/profie_controller.dart';
+import 'package:fuzzy_trivia/premium_features/profile/controller/profile_bottomsheet.dart';
 import 'package:fuzzy_trivia/premium_features/profile/ui/profile_page.dart';
 import 'package:fuzzy_trivia/premium_features/single_player/match_making/ui/lobby_bottomsheet.dart';
 import 'package:fuzzy_trivia/premium_features/single_player/match_making/ui/matchmaking_screen.dart';
@@ -46,15 +47,22 @@ class _PremiumHomeState extends State<PremiumHome> {
             children: [
               Obx(
                 () => GestureDetector(
-                  onTap: ()=> Get.to(()=> CreateProfile()),
+                  onTap: (){
+                     showModalBottomSheet(
+                        backgroundColor: Colors.transparent,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const ProfileBottomSheet();
+                        },
+                      );
+                  },
                   child: Container(
                     margin: const EdgeInsets.only(top: 12),
                     child: Row(
                       children: [
                         UserProfileAvatar(
                           avatarUrl: profileController.profilePicture.value,
-                          onAvatarTap: () {
-                          },
+                          onAvatarTap: () {},
                           avatarSplashColor: Colors.purple,
                           radius: 27,
                           isActivityIndicatorSmall: true,
@@ -189,7 +197,7 @@ class _PremiumHomeState extends State<PremiumHome> {
                 children: [
                   GestureDetector(
                     onTap: () async {
-                      await showModalBottomSheet(
+                       showModalBottomSheet(
                         backgroundColor: Colors.transparent,
                         context: context,
                         builder: (BuildContext context) {
@@ -237,9 +245,9 @@ class _PremiumHomeState extends State<PremiumHome> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Get.to(()=> const MatchmakingScreen(
-                        mode: 'premium_single',
-                      ));
+                      Get.to(() => const MatchmakingScreen(
+                            mode: 'premium_single',
+                          ));
                     },
                     child: Container(
                       height: 150,

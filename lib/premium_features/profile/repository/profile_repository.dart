@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class ProfileRepository {
-  
   Future<void> createUserProfile(String userId, String username, int totalScore,
       bool isSubscribed, imageUrl) async {
     try {
@@ -55,6 +54,19 @@ class ProfileRepository {
     gameRooms.doc(uid).update({
       'total_score': score,
     });
+  }
+
+  Future<List<String>> getImageUrlsFromFirebaseStorage() async {
+    FirebaseStorage storage = FirebaseStorage.instance;
+    ListResult result = await storage.ref('avatars/').listAll();
+    List<String> imageUrls = [];
+
+    for (var imageRef in result.items) {
+      String imageUrl = await imageRef.getDownloadURL();
+      imageUrls.add(imageUrl);
+    }
+
+    return imageUrls;
   }
 
   Future<String?> uploadProfilePicture(File imageFile, String userId) async {

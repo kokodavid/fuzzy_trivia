@@ -1,15 +1,18 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fuzzy_trivia/auth/controller/auth_controller.dart';
 import 'package:fuzzy_trivia/constants.dart';
 import 'package:get/get.dart';
-import 'package:random_avatar/random_avatar.dart';
 
 class LeaderboardController extends GetxController {
-  String svgCode = RandomAvatarString('saytoonz');
+  final AuthController authController = Get.put(AuthController());
   bool isLoading = false;
+  List<DocumentSnapshot>? leaderboardList;
+  int? userRank;
 
   buildLeaderboard() {
     return StreamBuilder<QuerySnapshot>(
@@ -19,10 +22,7 @@ class LeaderboardController extends GetxController {
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          isLoading = true;
-          log(isLoading.toString());
-        } else {
-          isLoading = false;
+          return const CircularProgressIndicator();
         }
         if (!snapshot.hasData) {
           return const Text("No Data");
@@ -39,6 +39,11 @@ class LeaderboardController extends GetxController {
                       final totalScore = doc.get('total_score');
                       final name = doc.get('username');
                       final profileImage = doc.get('profile_picture_url');
+
+                      List<DocumentSnapshot> documents = snapshot.data!.docs;
+                      userRank =
+                          getRanking(documents, authController.user.value!.uid);
+
 
                       if (index < 3) {
                         return Card(
@@ -111,5 +116,18 @@ class LeaderboardController extends GetxController {
                   ));
       },
     );
+  }
+
+  int getRanking(List<DocumentSnapshot> documents, String currentUserUid) {
+    int ranking = 0;
+
+    for (int i = 0; i < documents.length; i++) {
+      if (documents[i].id == currentUserUid) {
+        ranking = i + 1;
+        break;
+      }
+    }
+
+    return ranking;
   }
 }
