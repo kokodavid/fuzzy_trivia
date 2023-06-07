@@ -110,8 +110,8 @@ class ImagePickerWidget extends StatelessWidget {
                           onTap: () =>
                               _imagePickerController.pickImageFromUrl(url),
                           child: Container(
-                            width: 50,
-                            height: 50,
+                            width: 60,
+                            height: 60,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(50),
                               border: Border.all(
