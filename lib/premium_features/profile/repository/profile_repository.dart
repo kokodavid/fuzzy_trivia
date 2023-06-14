@@ -3,16 +3,18 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfileRepository {
   Future<void> createUserProfile(String userId, String username, int totalScore,
-      bool isSubscribed, imageUrl) async {
+      bool isSubscribed, imageUrl,List<String> friends) async {
     try {
       Map<String, dynamic> profileData = {
         'username': username,
         'total_score': totalScore,
         'is_subscribed': isSubscribed,
-        'profile_picture_url': imageUrl
+        'profile_picture_url': imageUrl,
+        'friends':friends
       };
       await FirebaseFirestore.instance
           .collection('profiles')
@@ -38,6 +40,19 @@ class ProfileRepository {
     }
   }
 
+  Future<bool> hasProfile(String uid) async {
+  try {
+    final profileSnapshot = await FirebaseFirestore.instance
+        .collection('profiles')
+        .doc(uid)
+        .get();
+    return profileSnapshot.exists;
+  } catch (e) {
+    log('Error checking user profile: $e');
+    return false;
+  }
+}
+
   Future<bool> checkUsernameExists(String username) async {
     final QuerySnapshot<Map<String, dynamic>> result = await FirebaseFirestore
         .instance
@@ -56,6 +71,15 @@ class ProfileRepository {
     });
   }
 
+  Future<void> updateProfile(String uid, String username) async {
+    CollectionReference profile =
+        FirebaseFirestore.instance.collection('profiles');
+
+    profile.doc(uid).update({
+      'username': username,
+    });
+  }
+
   Future<List<String>> getImageUrlsFromFirebaseStorage() async {
     FirebaseStorage storage = FirebaseStorage.instance;
     ListResult result = await storage.ref('avatars/').listAll();
@@ -69,17 +93,4 @@ class ProfileRepository {
     return imageUrls;
   }
 
-  Future<String?> uploadProfilePicture(File imageFile, String userId) async {
-    try {
-      Reference storageRef =
-          FirebaseStorage.instance.ref().child('profile_pictures/$userId.jpg');
-      UploadTask uploadTask = storageRef.putFile(imageFile);
-      TaskSnapshot snapshot = await uploadTask.whenComplete(() => null);
-
-      String downloadUrl = await snapshot.ref.getDownloadURL();
-      return downloadUrl;
-    } catch (error) {
-      log('Failed to upload profile picture: $error');
-    }
-  }
 }

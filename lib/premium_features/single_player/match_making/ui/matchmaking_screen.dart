@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:fuzzy_trivia/constants.dart';
 import 'package:fuzzy_trivia/premium_features/mutiplayer/controller/multiplayer_controller.dart';
+import 'package:fuzzy_trivia/premium_features/mutiplayer/ui/join_room.dart';
 import 'package:fuzzy_trivia/premium_features/mutiplayer/ui/multiplayer_screen.dart';
 import 'package:fuzzy_trivia/premium_features/single_player/match_making/ui/button.dart';
 import 'package:fuzzy_trivia/premium_features/single_player/match_making/ui/input_widget.dart';
@@ -34,6 +35,7 @@ class _MatchmakingScreenState extends State<MatchmakingScreen> {
   String? category;
   String? difficulty;
   String? questions;
+  BuildContext? dialogContext;
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +96,33 @@ class _MatchmakingScreenState extends State<MatchmakingScreen> {
                       color: Colors.white,
                       hint: 'Range between 1 - 50',
                       controller: multiController.controller,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          Get.snackbar(
+                            'Number of Questions',
+                            'Please enter a value',
+                            backgroundColor: Colors.red,
+                          );
+
+                          return '';
+                        }
+                        int? enteredValue = int.tryParse(value);
+                        if (enteredValue == null) {
+                          Get.snackbar(
+                              backgroundColor: Colors.red,
+                              'Number of Questions',
+                              'Please enter a valid number');
+                          return '';
+                        }
+                        if (enteredValue > 50) {
+                          Get.snackbar(
+                              'Number of Questions',
+                              backgroundColor: Colors.red,
+                              'Value must be less than or equal to 50');
+                          return '';
+                        }
+                        return null; // Validation passed
+                      },
                     )),
                 Column(
                   children: [
@@ -226,29 +255,36 @@ class _MatchmakingScreenState extends State<MatchmakingScreen> {
               title: 'Create Match',
               color: secondaryGreen,
               onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
+                try {
+                  if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
 
-                  log("LOG${multiController.controller.text}");
+                    log("LOG${multiController.controller.text}");
 
-                  await multiController.createNewGameRoom(
-                      authController.user.value!.uid,
-                      category,
-                      difficulty,
-                      int.parse(multiController.controller.text));
+                    await multiController.createNewGameRoom(
+                        authController.user.value!.uid,
+                        category,
+                        difficulty,
+                        int.parse(multiController.controller.text));
 
-                  await multiController.getRoomData(multiController.roomId);
+                    await multiController.getRoomData(multiController.roomId);
 
-                  widget.mode != 'premium_single'
-                      ? Get.to(() => LobbyScreen(
-                            roomId: multiController.roomId,
-                          ))
-                      : Get.to(() => QuizScreen(
-                            mode: widget.mode,
-                            category: category,
-                            difficulty: difficulty,
-                            questions: int.parse(multiController.controller.text),
-                          ));
+                    widget.mode != 'premium_single'
+                        ? _showDialog()
+                        : Get.to(() => QuizScreen(
+                              mode: widget.mode,
+                              category: category,
+                              difficulty: difficulty,
+                              questions:
+                                  int.parse(multiController.controller.text),
+                            ));
+                  }
+                } catch (e) {
+                  log(e.toString());
+                  Get.snackbar(
+                      'Error',
+                      backgroundColor: Colors.red,
+                      'All fields are required');
                 }
               },
               txtColor: Colors.white,
@@ -256,6 +292,17 @@ class _MatchmakingScreenState extends State<MatchmakingScreen> {
           )
         ],
       ),
+    );
+  }
+
+  void _showDialog() {
+    dialogContext = context;
+    showDialog(
+      barrierDismissible: false,
+      context: dialogContext!,
+      builder: (context) {
+        return JoinGameDialog(roomId: multiController.roomId);
+      },
     );
   }
 }

@@ -1,9 +1,11 @@
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flutter/material.dart';
+import 'package:fuzzy_trivia/premium_features/friends/ui/friends_bottomsheet.dart';
 import 'package:fuzzy_trivia/premium_features/leaderboard/leaderboard.dart';
 import 'package:fuzzy_trivia/premium_features/profile/controller/profie_controller.dart';
 import 'package:fuzzy_trivia/premium_features/profile/controller/profile_bottomsheet.dart';
 import 'package:fuzzy_trivia/premium_features/profile/ui/profile_page.dart';
+import 'package:fuzzy_trivia/premium_features/single_player/match_making/ui/circular_avatar.dart';
 import 'package:fuzzy_trivia/premium_features/single_player/match_making/ui/lobby_bottomsheet.dart';
 import 'package:fuzzy_trivia/premium_features/single_player/match_making/ui/matchmaking_screen.dart';
 import 'package:get/get.dart';
@@ -13,6 +15,7 @@ import '../auth/controller/auth_controller.dart';
 import '../constants.dart';
 import '../screens/quiz/quiz_screen.dart';
 import 'leaderboard/leaderboard_controller.dart';
+import 'mutiplayer/ui/join_room.dart';
 
 class PremiumHome extends StatefulWidget {
   const PremiumHome({super.key});
@@ -47,44 +50,70 @@ class _PremiumHomeState extends State<PremiumHome> {
             children: [
               Obx(
                 () => GestureDetector(
-                  onTap: (){
-                     showModalBottomSheet(
-                        backgroundColor: Colors.transparent,
-                        context: context,
-                        builder: (BuildContext context) {
-                          return const ProfileBottomSheet();
-                        },
-                      );
+                  onTap: () {
+                    showModalBottomSheet(
+                      backgroundColor: Colors.transparent,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const ProfileBottomSheet();
+                      },
+                    );
                   },
                   child: Container(
                     margin: const EdgeInsets.only(top: 12),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        UserProfileAvatar(
-                          avatarUrl: profileController.profilePicture.value,
-                          onAvatarTap: () {},
-                          avatarSplashColor: Colors.purple,
-                          radius: 27,
-                          isActivityIndicatorSmall: true,
-                          avatarBorderData: AvatarBorderData(
-                            borderColor: Colors.white,
-                            borderWidth: 1.0,
-                          ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        Row(
                           children: [
-                            Text(
-                              "Hello ${profileController.username}",
-                              style: const TextStyle(
-                                  fontSize: 20, color: primaryGreen),
+                            Container(
+                              margin: const EdgeInsets.only(right: 10),
+                              child: LoadingCircleAvatar(
+                                imageUrl:
+                                    profileController.profilePicture.value,
+                                radius: 27,
+                              ),
                             ),
-                            const Text(
-                              "Profile and settings",
-                              style: TextStyle(fontSize: 17, color: textGrey),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Hello ${profileController.username}",
+                                  style: const TextStyle(
+                                      fontSize: 20, color: primaryGreen),
+                                ),
+                                const Text(
+                                  "Profile and settings",
+                                  style:
+                                      TextStyle(fontSize: 17, color: textGrey),
+                                ),
+                              ],
                             ),
                           ],
                         ),
+                        GestureDetector(
+                          onTap: () {
+                            showModalBottomSheet(
+                              backgroundColor: Colors.transparent,
+                              context: context,
+                              builder: (BuildContext context) {
+                                return const FriendsBottomSheet();
+                              },
+                            );
+                          },
+                          child: Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: Colors.white),
+                              child: Container(
+                                margin: const EdgeInsets.all(12),
+                                child: Image.asset(
+                                  'assets/icons/friends.png',
+                                ),
+                              )),
+                        )
                       ],
                     ),
                   ),
@@ -197,7 +226,7 @@ class _PremiumHomeState extends State<PremiumHome> {
                 children: [
                   GestureDetector(
                     onTap: () async {
-                       showModalBottomSheet(
+                      showModalBottomSheet(
                         backgroundColor: Colors.transparent,
                         context: context,
                         builder: (BuildContext context) {

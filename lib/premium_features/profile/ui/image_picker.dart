@@ -6,14 +6,24 @@ import 'package:fuzzy_trivia/constants.dart';
 import 'package:fuzzy_trivia/premium_features/profile/controller/profie_controller.dart';
 import 'package:get/get.dart';
 
+import '../../../auth/controller/auth_controller.dart';
 import '../../single_player/match_making/ui/button.dart';
 import '../../single_player/match_making/ui/input_widget.dart';
 import '../controller/image_picker_controller.dart';
 
-class ImagePickerWidget extends StatelessWidget {
+class ImagePickerWidget extends StatefulWidget {
+  @override
+  State<ImagePickerWidget> createState() => _ImagePickerWidgetState();
+}
+
+class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   final ImagePickerController _imagePickerController =
       Get.put(ImagePickerController());
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController controller = TextEditingController();
+
   final ProfileController profileController = Get.put(ProfileController());
+  final AuthController authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -21,21 +31,23 @@ class ImagePickerWidget extends StatelessWidget {
       child: Column(
         children: [
           Obx(() => Container(
-                height: 120,
-                width: 120,
-                margin: const EdgeInsets.only(top: 15),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(120),
-                    border: Border.all(color: primaryGreen, width: 2)),
-                child: _imagePickerController.pickedImage.value != null
-                    ? ClipOval(
-                        child: Image.file(
-                          File(_imagePickerController.pickedImage.value!.path),
-                          fit: BoxFit.cover,
-                        ),
-                      )
-                    : _imagePickerController.imageUrl.value.isNotEmpty
-                        ? CachedNetworkImage(
+              height: 120,
+              width: 120,
+              margin: const EdgeInsets.only(top: 15),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(120),
+                  border: Border.all(color: primaryGreen, width: 2)),
+              child: _imagePickerController.pickedImage.value != null
+                  ? ClipOval(
+                      child: Image.file(
+                        File(_imagePickerController.pickedImage.value!.path),
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  : _imagePickerController.imageUrl.value.isNotEmpty
+                      ? ClipOval(
+                          child: CachedNetworkImage(
+                            fit: BoxFit.cover,
                             imageUrl: _imagePickerController.imageUrl.value,
                             placeholder: (context, url) =>
                                 const CircularProgressIndicator(
@@ -43,16 +55,21 @@ class ImagePickerWidget extends StatelessWidget {
                             ),
                             errorWidget: (context, url, error) =>
                                 const Icon(Icons.error),
-                          )
-                        : Container(),
-              )),
+                          ),
+                        )
+                      : CircleAvatar(
+                          backgroundImage: NetworkImage(
+                              profileController.profilePicture.value),
+                        ))),
           Container(
               margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: Column(
-                children: const [
+                children: [
                   InputWidget(
+                    formKey: _formKey,
                     color: inputBackground,
                     hint: "Username",
+                    controller: controller,
                   ),
                 ],
               )),
@@ -150,7 +167,25 @@ class ImagePickerWidget extends StatelessWidget {
               title: "Update Profile",
               color: secondaryGreen,
               txtColor: Colors.white,
-              onPressed: () {},
+              onPressed: () async {
+                if (_formKey.currentState!.validate()) {
+                  _formKey.currentState!.save();
+
+                  await profileController.verifyUsername(controller.text);
+
+                  await _imagePickerController
+                      .uploadProfilePicture(authController.user.value!.uid);
+
+                  if (profileController.usernameBool == false) {
+                    await profileController.updateProfile(
+                        authController.user.value!.uid, controller.text);
+                  } else {
+                    Get.snackbar('Error', 'Username already exists',
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.red);
+                  }
+                }
+              },
             ),
           ),
         ],

@@ -9,16 +9,19 @@ class InputNumbers extends StatelessWidget {
       this.hint,
       required this.color,
       this.controller,
-      required this.formKey});
+      required this.formKey,
+      this.validator, this.onSaved});
 
   final String? hint;
   final Color color;
   final Key formKey;
   final TextEditingController? controller;
+  final Function? validator;
+  final Function? onSaved;
+  
 
   @override
   Widget build(BuildContext context) {
-    int maxValue = 50;
 
     return Container(
       height: 54,
@@ -30,37 +33,12 @@ class InputNumbers extends StatelessWidget {
           keyboardType: TextInputType.number,
           style: const TextStyle(color: hintColor),
           controller: controller,
+          onSaved: onSaved as String? Function(String?)?,
           inputFormatters: [
             FilteringTextInputFormatter.digitsOnly,
             LengthLimitingTextInputFormatter(2),
           ],
-          validator: (value) {
-            if (value!.isEmpty) {
-              Get.snackbar(
-                'Number of Questions',
-                'Please enter a value',
-                backgroundColor: Colors.red,
-              );
-
-              return '';
-            }
-            int? enteredValue = int.tryParse(value);
-            if (enteredValue == null) {
-              Get.snackbar(
-                  backgroundColor: Colors.red,
-                  'Number of Questions',
-                  'Please enter a valid number');
-              return '';
-            }
-            if (enteredValue > maxValue) {
-              Get.snackbar(
-                  'Number of Questions',
-                  backgroundColor: Colors.red,
-                  'Value must be less than or equal to $maxValue');
-              return '';
-            }
-            return null; // Validation passed
-          },
+          validator: validator as String? Function(String?)?,
           decoration: InputDecoration(
               border: InputBorder.none,
               focusedBorder: InputBorder.none,

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fuzzy_trivia/auth/controller/auth_controller.dart';
+import 'package:fuzzy_trivia/premium_features/profile/controller/image_picker_controller.dart';
 import 'package:fuzzy_trivia/premium_features/profile/repository/profile_repository.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,9 +13,11 @@ import '../../leaderboard/leaderboard_controller.dart';
 
 class ProfileController extends GetxController {
   final ProfileRepository _profileRepository = ProfileRepository();
-    final AuthController authController = Get.put(AuthController());
-        final LeaderboardController leaderboardController = Get.put(LeaderboardController());
-
+  final AuthController authController = Get.put(AuthController());
+  final LeaderboardController leaderboardController =
+      Get.put(LeaderboardController());
+  final ImagePickerController imagePickerController =
+      Get.put(ImagePickerController());
 
   File? imageFile;
   bool? usernameBool;
@@ -52,7 +55,6 @@ class ProfileController extends GetxController {
     }
   }
 
-
   pickImage(ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source);
 
@@ -72,7 +74,7 @@ class ProfileController extends GetxController {
 
       profileAvailable = true;
       update();
-      log(profileAvailable.toString());
+      log(_picture.value.toString());
       update();
 
       log(userData['username']);
@@ -100,8 +102,7 @@ class ProfileController extends GetxController {
 
   uploadProfilePicture(imageFile, userId) async {
     try {
-      profileUrl =
-          await _profileRepository.uploadProfilePicture(imageFile, userId);
+      profileUrl = await imagePickerController.uploadProfilePicture(userId);
     } catch (e) {
       log(e.toString());
     }
@@ -115,10 +116,19 @@ class ProfileController extends GetxController {
     }
   }
 
-  uploadProfile(userId, username, totalScore, isSubscribed, imageUrl) async {
+  uploadProfile(
+      userId, username, totalScore, isSubscribed, imageUrl, friends) async {
     try {
       await _profileRepository.createUserProfile(
-          userId, username, totalScore, isSubscribed, imageUrl);
+          userId, username, totalScore, isSubscribed, imageUrl, friends);
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  updateProfile(userId, username) async {
+    try {
+      await _profileRepository.updateProfile(userId, username);
     } catch (e) {
       log(e.toString());
     }

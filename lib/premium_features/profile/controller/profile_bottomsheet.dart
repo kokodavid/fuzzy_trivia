@@ -8,6 +8,7 @@ import 'package:user_profile_avatar/user_profile_avatar.dart';
 
 import '../../leaderboard/leaderboard_controller.dart';
 import '../../single_player/match_making/ui/button.dart';
+import '../../single_player/match_making/ui/circular_avatar.dart';
 
 class ProfileBottomSheet extends StatefulWidget {
   const ProfileBottomSheet({super.key});
@@ -59,15 +60,11 @@ class _ProfileBottomSheetState extends State<ProfileBottomSheet> {
                   children: [
                     Column(
                       children: [
-                        UserProfileAvatar(
-                          avatarUrl: profileController.profilePicture.value,
-                          onAvatarTap: () {},
-                          avatarSplashColor: Colors.purple,
-                          radius: 55,
-                          isActivityIndicatorSmall: true,
-                          avatarBorderData: AvatarBorderData(
-                            borderColor: primaryGreen,
-                            borderWidth: 2.0,
+                        Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          child: LoadingCircleAvatar(
+                            imageUrl: profileController.profilePicture.value,
+                            radius: 55,
                           ),
                         ),
                         Text(

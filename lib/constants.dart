@@ -11,6 +11,7 @@ const textGrey = Color(0xFF6D6363);
 const background = Color(0xFFE8E8E8);
 const grey = Color(0xFFEDEDED);
 const secondaryGreen = Color(0xFF04CC7B);
+const greenIcons = Color(0xFF0FA958);
 const buttonB = Color(0xFFF7F2F2);
 const polePosition = Color(0xFFFFCA28);
 const second = Color(0xFF34A853);

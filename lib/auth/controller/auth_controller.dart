@@ -4,16 +4,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fuzzy_trivia/premium_features/premium_home.dart';
+import 'package:fuzzy_trivia/premium_features/profile/ui/create_profile.dart';
 import 'package:get/get.dart';
 
+import '../../premium_features/profile/repository/profile_repository.dart';
 import '../repository/auth_repository.dart';
 
 class AuthController extends GetxController {
-  final AuthRepository _authRepository = AuthRepository();
+  final AuthRepository authRepository = AuthRepository();
+    final ProfileRepository profileRepository = ProfileRepository();
+
 
   Rx<User?> user = Rx<User?>(null);
   bool? profileAvailable;
   bool isLoading = false;
+  bool? hasProfile;
 
   @override
   void onInit() {
@@ -23,7 +28,7 @@ class AuthController extends GetxController {
 
   void _init() async {
     try {
-      final currentUser = _authRepository.getCurrentUser();
+      final currentUser = authRepository.getCurrentUser();
       if (currentUser != null) {
         user.value = currentUser;
         log(user.value!.uid);
@@ -35,7 +40,7 @@ class AuthController extends GetxController {
 
   checkUserData(userId) async {
     try {
-      final userData = await _authRepository.checkUserProfile(userId);
+      final userData = await authRepository.checkUserProfile(userId);
 
       profileAvailable = userData;
 
@@ -50,12 +55,18 @@ class AuthController extends GetxController {
   void signInWithGoogle() async {
     try {
       isLoading = true;
-      final result = await _authRepository.signInWithGoogle();
+      final result = await authRepository.signInWithGoogle();
       
       if (result != null) {
-        isLoading = false;
         user.value = result.user;
-        Get.to(const PremiumHome());
+         hasProfile = await profileRepository.hasProfile(result.user!.uid);
+        if (hasProfile == true) {
+    Get.to(()=> const PremiumHome());
+  } else {
+     Get.to(()=> const CreateProfilePage());
+  }
+        
+        
       } else {
         Get.snackbar('Error', 'Unable to sign in with Google.');
       }
@@ -74,7 +85,7 @@ class AuthController extends GetxController {
 
   void signOut() async {
     try {
-      await _authRepository.signOut();
+      await authRepository.signOut();
       user.value = null;
     } catch (e) {
       log(e.toString());
