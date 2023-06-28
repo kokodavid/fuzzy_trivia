@@ -1,8 +1,10 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fuzzy_trivia/constants.dart';
+import 'package:fuzzy_trivia/premium_features/premium_home.dart';
 import 'package:get/get.dart';
 
 import '../../../auth/controller/auth_controller.dart';
@@ -25,6 +27,8 @@ class _CreatProfilePageState extends State<CreateProfilePage> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController controller = TextEditingController();
   final AuthController authController = Get.put(AuthController());
+  List<String> friends = [];
+  List<String> requests = [];
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +41,9 @@ class _CreatProfilePageState extends State<CreateProfilePage> {
             const SizedBox(
               height: kTextTabBarHeight * 1.5,
             ),
-            Stack(
+            const Stack(
               alignment: Alignment.center,
-              children: const [
+              children: [
                 Center(
                   child: Text(
                     'Create Profile',
@@ -113,9 +117,9 @@ class _CreatProfilePageState extends State<CreateProfilePage> {
                             color: buttonGrey,
                             borderRadius: BorderRadius.circular(15)),
                         margin: const EdgeInsets.symmetric(vertical: 10),
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             Icon(
                               Icons.photo_library_outlined,
                               color: Colors.black,
@@ -193,21 +197,40 @@ class _CreatProfilePageState extends State<CreateProfilePage> {
                 color: secondaryGreen,
                 txtColor: Colors.white,
                 onPressed: () async {
+                  await profileController
+                      .uploadProfilePicture(authController.user.value!.uid);
+
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
 
                     await profileController.verifyUsername(controller.text);
 
-                    await imagePickerController
-                        .uploadProfilePicture(authController.user.value!.uid);
+                    try {
+                      if (profileController.usernameBool == false &&
+                          profileController.profileUrl != null) {
+                        await profileController.uploadProfile(
+                            authController.user.value!.uid,
+                            controller.text,
+                            0,
+                            false,
+                            profileController.profileUrl,
+                            friends,
+                            requests
+                            );
 
-                    if (profileController.usernameBool == false) {
-                      await profileController.updateProfile(
-                          authController.user.value!.uid, controller.text);
-                    } else {
-                      Get.snackbar('Error', 'Username already exists',
-                          snackPosition: SnackPosition.BOTTOM,
-                          backgroundColor: Colors.red);
+                        Get.to(() => const PremiumHome());
+                      } else {
+                        profileController.usernameBool != false
+                            ? Get.snackbar('Error', 'Username already exists',
+                                snackPosition: SnackPosition.TOP,
+                                backgroundColor: Colors.red)
+                            : Get.snackbar(
+                                'Error', 'Please select a profile picture',
+                                snackPosition: SnackPosition.TOP,
+                                backgroundColor: Colors.red);
+                      }
+                    } catch (e) {
+                      log(e.toString());
                     }
                   }
                 },

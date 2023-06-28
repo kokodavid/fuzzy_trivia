@@ -48,6 +48,7 @@ class InputWidget extends StatelessWidget {
               disabledBorder: InputBorder.none,
               contentPadding: const EdgeInsets.all(20),
               hintText: hint,
+              errorStyle: const TextStyle(height: 0),
               hintStyle: const TextStyle(color: hintColor)),
         ),
       ),

@@ -1,21 +1,17 @@
-import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:fuzzy_trivia/premium_features/friends/ui/friends_bottomsheet.dart';
 import 'package:fuzzy_trivia/premium_features/leaderboard/leaderboard.dart';
 import 'package:fuzzy_trivia/premium_features/profile/controller/profie_controller.dart';
 import 'package:fuzzy_trivia/premium_features/profile/controller/profile_bottomsheet.dart';
-import 'package:fuzzy_trivia/premium_features/profile/ui/profile_page.dart';
 import 'package:fuzzy_trivia/premium_features/single_player/match_making/ui/circular_avatar.dart';
 import 'package:fuzzy_trivia/premium_features/single_player/match_making/ui/lobby_bottomsheet.dart';
 import 'package:fuzzy_trivia/premium_features/single_player/match_making/ui/matchmaking_screen.dart';
 import 'package:get/get.dart';
-import 'package:user_profile_avatar/user_profile_avatar.dart';
 
 import '../auth/controller/auth_controller.dart';
 import '../constants.dart';
 import '../screens/quiz/quiz_screen.dart';
 import 'leaderboard/leaderboard_controller.dart';
-import 'mutiplayer/ui/join_room.dart';
 
 class PremiumHome extends StatefulWidget {
   const PremiumHome({super.key});
@@ -183,7 +179,7 @@ class _PremiumHomeState extends State<PremiumHome> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Get.to(() => LeaderboardPage());
+                        Get.to(() => const LeaderboardPage());
                       },
                       child: Container(
                         margin: const EdgeInsets.only(top: 5),

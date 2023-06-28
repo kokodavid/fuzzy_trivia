@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fuzzy_trivia/constants.dart';
-import 'package:get/get.dart';
 
 class InputNumbers extends StatelessWidget {
   const InputNumbers(

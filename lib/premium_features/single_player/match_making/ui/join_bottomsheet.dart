@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fuzzy_trivia/premium_features/mutiplayer/controller/multiplayer_controller.dart';
 import 'package:fuzzy_trivia/premium_features/single_player/match_making/ui/button.dart';
-import 'package:fuzzy_trivia/premium_features/single_player/match_making/ui/input_widget.dart';
 import 'package:get/get.dart';
 
 import '../../../../auth/controller/auth_controller.dart';

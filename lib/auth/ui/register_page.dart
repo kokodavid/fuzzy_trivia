@@ -1,18 +1,14 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:fuzzy_trivia/auth/ui/sign_in_button.dart';
-import 'package:fuzzy_trivia/premium_features/leaderboard/leaderboard.dart';
 import 'package:fuzzy_trivia/premium_features/premium_home.dart';
 import 'package:fuzzy_trivia/premium_features/profile/controller/profie_controller.dart';
 import 'package:get/get.dart';
 
 import '../../premium_features/profile/ui/create_profile.dart';
-import '../../premium_features/profile/ui/profile_page.dart';
 import '../controller/auth_controller.dart';
 
 class RegisterPage extends StatefulWidget {
-  RegisterPage({super.key});
+  const RegisterPage({super.key});
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -31,7 +27,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _authController.user.value == null 
+      body: _authController.user.value == null
           ? Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(
@@ -154,10 +150,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
             )
-          :  _authController.hasProfile == true ? 
-          
-          const PremiumHome(): const CreateProfilePage(),
+          : _authController.hasProfile == true
+              ? const PremiumHome()
+              : const CreateProfilePage(),
     );
   }
-  
 }

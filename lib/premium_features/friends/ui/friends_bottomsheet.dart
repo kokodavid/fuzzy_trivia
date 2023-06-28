@@ -45,8 +45,8 @@ class _FriendsBottomSheetState extends State<FriendsBottomSheet> {
             children: [
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 15),
-                child: Column(
-                  children: const [
+                child: const Column(
+                  children: [
                     Image(
                         height: 200,
                         width: 200,
@@ -70,10 +70,15 @@ class _FriendsBottomSheetState extends State<FriendsBottomSheet> {
                   txtColor: Colors.white,
                   onPressed: () {
                     showModalBottomSheet(
+                      isScrollControlled: true,
                       backgroundColor: Colors.transparent,
                       context: context,
                       builder: (BuildContext context) {
-                        return const AddFriend();
+                        return Padding(
+                          padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom),
+                          child: const AddFriend(),
+                        );
                       },
                     );
                   },

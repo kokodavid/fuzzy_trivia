@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
@@ -38,35 +37,40 @@ class ImagePickerController extends GetxController {
   Future<String?> uploadProfilePicture(String userId) async {
     if (selectedUploadOption.value == UploadOption.gallery) {
       try {
-        Reference storageRef = FirebaseStorage.instance
-            .ref()
-            .child('profile_pictures/$userId.jpg');
+        if (pickedImage.value != null) {
+          Reference storageRef = FirebaseStorage.instance
+              .ref()
+              .child('profile_pictures/$userId.jpg');
 
-        UploadTask uploadTask =
-            storageRef.putFile(File(pickedImage.value!.path));
-        TaskSnapshot snapshot = await uploadTask.whenComplete(() => null);
+          UploadTask uploadTask =
+              storageRef.putFile(File(pickedImage.value!.path));
+          TaskSnapshot snapshot = await uploadTask.whenComplete(() => null);
 
-        String downloadUrl = await snapshot.ref.getDownloadURL();
-        return downloadUrl;
+          String downloadUrl = await snapshot.ref.getDownloadURL();
+          return downloadUrl;
+        } 
       } catch (error) {
         log('Failed to upload profile picture: $error');
       }
       return null;
     } else if (selectedUploadOption.value == UploadOption.url) {
       try {
-        Reference storageRef = FirebaseStorage.instance
-            .ref()
-            .child('profile_pictures/$userId.jpg');
+        // ignore: unnecessary_null_comparison
+        if (imageUrl.value != null) {
+          Reference storageRef = FirebaseStorage.instance
+              .ref()
+              .child('profile_pictures/$userId.jpg');
 
-        final http.Response response =
-            await http.get(Uri.parse(imageUrl.value));
-        final imageData = response.bodyBytes;
+          final http.Response response =
+              await http.get(Uri.parse(imageUrl.value));
+          final imageData = response.bodyBytes;
 
-        UploadTask uploadTask = storageRef.putData(imageData);
-        TaskSnapshot snapshot = await uploadTask.whenComplete(() => null);
+          UploadTask uploadTask = storageRef.putData(imageData);
+          TaskSnapshot snapshot = await uploadTask.whenComplete(() => null);
 
-        String downloadUrl = await snapshot.ref.getDownloadURL();
-        return downloadUrl;
+          String downloadUrl = await snapshot.ref.getDownloadURL();
+          return downloadUrl;
+        } 
       } catch (error) {
         log('Failed to upload profile picture: $error');
       }

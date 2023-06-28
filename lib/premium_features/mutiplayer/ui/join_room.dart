@@ -12,6 +12,7 @@ class JoinGameDialog extends StatefulWidget {
   final String? roomId;
 
   @override
+  // ignore: library_private_types_in_public_api
   _JoinGameDialogState createState() => _JoinGameDialogState();
 }
 

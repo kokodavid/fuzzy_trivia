@@ -1,8 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fuzzy_trivia/auth/controller/auth_controller.dart';
 import 'package:fuzzy_trivia/premium_features/profile/controller/image_picker_controller.dart';
 import 'package:fuzzy_trivia/premium_features/profile/repository/profile_repository.dart';
@@ -100,11 +98,11 @@ class ProfileController extends GetxController {
     }
   }
 
-  uploadProfilePicture(imageFile, userId) async {
+  uploadProfilePicture(userId) async {
     try {
       profileUrl = await imagePickerController.uploadProfilePicture(userId);
     } catch (e) {
-      log(e.toString());
+      log("Profile Picture${e.toString()}");
     }
   }
 
@@ -117,10 +115,10 @@ class ProfileController extends GetxController {
   }
 
   uploadProfile(
-      userId, username, totalScore, isSubscribed, imageUrl, friends) async {
+      userId, username, totalScore, isSubscribed, imageUrl, friends,requests) async {
     try {
       await _profileRepository.createUserProfile(
-          userId, username, totalScore, isSubscribed, imageUrl, friends);
+          userId, username, totalScore, isSubscribed, imageUrl, friends,requests);
     } catch (e) {
       log(e.toString());
     }

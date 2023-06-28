@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>970701432670-58j8491654p8p7gr1diumm95212kdci7.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.970701432670-58j8491654p8p7gr1diumm95212kdci7</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>970701432670-081e6qoms1r4clr6n2o4kqdr9srd4slm.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBagCMQkL7U9duE9PpkFckFIY5g8k17QF8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>970701432670</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.giglab.fuzzytrivia</string>
+	<key>PROJECT_ID</key>
+	<string>fuzzytrivia-ebad8</string>
+	<key>STORAGE_BUCKET</key>
+	<string>fuzzytrivia-ebad8.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:970701432670:ios:f91914cd6690e2c25491cf</string>
+</dict>
+</plist>

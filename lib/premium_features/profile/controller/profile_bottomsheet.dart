@@ -4,7 +4,6 @@ import 'package:fuzzy_trivia/constants.dart';
 import 'package:fuzzy_trivia/premium_features/profile/controller/profie_controller.dart';
 import 'package:fuzzy_trivia/premium_features/profile/ui/profile_page.dart';
 import 'package:get/get.dart';
-import 'package:user_profile_avatar/user_profile_avatar.dart';
 
 import '../../leaderboard/leaderboard_controller.dart';
 import '../../single_player/match_making/ui/button.dart';
@@ -197,7 +196,7 @@ class _ProfileBottomSheetState extends State<ProfileBottomSheet> {
               title: "Edit Profile",
               color: secondaryGreen,
               txtColor: Colors.white,
-              onPressed: () => Get.to(() => CreateProfile()),
+              onPressed: () => Get.to(() => const CreateProfile()),
             ),
           ),
         ],

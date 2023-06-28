@@ -7,7 +7,7 @@ import 'package:fuzzy_trivia/screens/quiz/quiz_screen.dart';
 import 'package:get/get.dart';
 
 class LobbyScreen extends StatefulWidget {
-  LobbyScreen({Key? key, this.roomId}) : super(key: key);
+  const LobbyScreen({Key? key, this.roomId}) : super(key: key);
 
   final String? roomId;
 
@@ -36,7 +36,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        margin: EdgeInsets.only(top: kToolbarHeight),
+        margin: const EdgeInsets.only(top: kToolbarHeight),
         child: StreamBuilder(
           stream: _mFirestore
               .collection('gameRooms')

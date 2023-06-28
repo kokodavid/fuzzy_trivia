@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fuzzy_trivia/constants.dart';
-import 'package:fuzzy_trivia/premium_features/mutiplayer/ui/join_room.dart';
 import 'package:fuzzy_trivia/premium_features/single_player/match_making/ui/button.dart';
 import 'package:fuzzy_trivia/premium_features/single_player/match_making/ui/join_bottomsheet.dart';
 import 'package:get/get.dart';

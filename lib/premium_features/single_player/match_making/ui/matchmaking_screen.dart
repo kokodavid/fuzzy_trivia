@@ -4,12 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:fuzzy_trivia/constants.dart';
 import 'package:fuzzy_trivia/premium_features/mutiplayer/controller/multiplayer_controller.dart';
 import 'package:fuzzy_trivia/premium_features/mutiplayer/ui/join_room.dart';
-import 'package:fuzzy_trivia/premium_features/mutiplayer/ui/multiplayer_screen.dart';
 import 'package:fuzzy_trivia/premium_features/single_player/match_making/ui/button.dart';
-import 'package:fuzzy_trivia/premium_features/single_player/match_making/ui/input_widget.dart';
 import 'package:fuzzy_trivia/premium_features/single_player/match_making/ui/numbers_widget.dart';
-import 'package:fuzzy_trivia/questions/controller/question_controller.dart';
-import 'package:fuzzy_trivia/screens/lobby/lobby_screen.dart';
 import 'package:fuzzy_trivia/screens/quiz/quiz_screen.dart';
 import 'package:get/get.dart';
 
@@ -22,6 +18,7 @@ class MatchmakingScreen extends StatefulWidget {
   final String? mode;
 
   @override
+  // ignore: library_private_types_in_public_api
   _MatchmakingScreenState createState() => _MatchmakingScreenState();
 }
 

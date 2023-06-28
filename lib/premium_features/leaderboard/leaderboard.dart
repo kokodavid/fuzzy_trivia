@@ -1,15 +1,15 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fuzzy_trivia/auth/controller/auth_controller.dart';
 import 'package:fuzzy_trivia/constants.dart';
 import 'package:fuzzy_trivia/premium_features/leaderboard/leaderboard_controller.dart';
 import 'package:get/get.dart';
-import 'package:random_avatar/random_avatar.dart';
 
 class LeaderboardPage extends StatefulWidget {
+  const LeaderboardPage({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _LeaderboardPageState createState() => _LeaderboardPageState();
 }
 

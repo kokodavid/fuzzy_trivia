@@ -1,8 +1,6 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:fuzzy_trivia/auth/controller/auth_controller.dart';
-import 'package:fuzzy_trivia/premium_features/mutiplayer/controller/multiplayer_controller.dart';
 import 'package:fuzzy_trivia/premium_features/single_player/match_making/ui/matchmaking_screen.dart';
 import 'package:get/get.dart';
 
@@ -20,8 +18,6 @@ class MultiPlayerScreen extends StatefulWidget {
 class _MultiPlayerScreenState extends State<MultiPlayerScreen> {
   final AuthController _authController = Get.put(AuthController());
 
-  final MultiplayerController _multiplayerController =
-      Get.put(MultiplayerController());
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +45,7 @@ class _MultiPlayerScreenState extends State<MultiPlayerScreen> {
                   showDialog<String>(
                     context: context,
                     builder: (BuildContext context) {
-                      return JoinGameDialog();
+                      return const JoinGameDialog();
                     },
                   );
                 },

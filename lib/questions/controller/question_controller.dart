@@ -14,6 +14,7 @@ import '../../screens/score/score_screen.dart';
 class QuestionController extends GetxController
     // ignore: deprecated_member_use
     with
+        // ignore: deprecated_member_use
         SingleGetTickerProviderMixin {
   final MultiPlayerRepository _multiPlayerRepository = MultiPlayerRepository();
   final ProfileController profileController = ProfileController();

@@ -12,6 +12,8 @@ import '../../single_player/match_making/ui/input_widget.dart';
 import '../controller/image_picker_controller.dart';
 
 class ImagePickerWidget extends StatefulWidget {
+  const ImagePickerWidget({super.key});
+
   @override
   State<ImagePickerWidget> createState() => _ImagePickerWidgetState();
 }
@@ -88,9 +90,9 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                           color: buttonGrey,
                           borderRadius: BorderRadius.circular(15)),
                       margin: const EdgeInsets.symmetric(vertical: 10),
-                      child: Row(
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Icon(
                             Icons.photo_library_outlined,
                             color: Colors.black,

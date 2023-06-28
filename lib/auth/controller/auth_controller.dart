@@ -12,8 +12,7 @@ import '../repository/auth_repository.dart';
 
 class AuthController extends GetxController {
   final AuthRepository authRepository = AuthRepository();
-    final ProfileRepository profileRepository = ProfileRepository();
-
+  final ProfileRepository profileRepository = ProfileRepository();
 
   Rx<User?> user = Rx<User?>(null);
   bool? profileAvailable;
@@ -29,6 +28,9 @@ class AuthController extends GetxController {
   void _init() async {
     try {
       final currentUser = authRepository.getCurrentUser();
+      
+      hasProfile = await profileRepository.hasProfile(user.value!.uid);
+
       if (currentUser != null) {
         user.value = currentUser;
         log(user.value!.uid);
@@ -56,17 +58,14 @@ class AuthController extends GetxController {
     try {
       isLoading = true;
       final result = await authRepository.signInWithGoogle();
-      
+
       if (result != null) {
-        user.value = result.user;
-         hasProfile = await profileRepository.hasProfile(result.user!.uid);
+        user.value = result.user;        
         if (hasProfile == true) {
-    Get.to(()=> const PremiumHome());
-  } else {
-     Get.to(()=> const CreateProfilePage());
-  }
-        
-        
+          Get.to(() => const PremiumHome());
+        } else {
+          Get.to(() => const CreateProfilePage());
+        }
       } else {
         Get.snackbar('Error', 'Unable to sign in with Google.');
       }

@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'dart:math' as m;
 
 import 'package:flutter/material.dart';
-import 'package:fuzzy_trivia/auth/controller/auth_controller.dart';
 import 'package:get/get.dart';
 
 import '../../../constants.dart';
@@ -10,6 +9,7 @@ import '../../../questions/controller/question_controller.dart';
 import '../../../questions/data/model/qustions_model.dart';
 import 'option.dart';
 
+// ignore: must_be_immutable
 class QuestionCard extends StatelessWidget {
   QuestionCard(
       {Key? key,
@@ -47,7 +47,6 @@ class QuestionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     QuestionController controller = Get.put(QuestionController());
-    AuthController authController = Get.put(AuthController());
 
     allAnswers = [...?question.incorrectAnswers, question.correctAnswer!];
 

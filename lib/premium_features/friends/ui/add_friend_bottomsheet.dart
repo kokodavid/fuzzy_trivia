@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fuzzy_trivia/premium_features/single_player/match_making/ui/input_widget.dart';
+import 'package:get/get.dart';
 
+import '../../../auth/controller/auth_controller.dart';
 import '../../../constants.dart';
+import '../../profile/controller/profie_controller.dart';
 import '../../single_player/match_making/ui/button.dart';
 
 class AddFriend extends StatefulWidget {
@@ -12,6 +15,11 @@ class AddFriend extends StatefulWidget {
 }
 
 class _AddFriendState extends State<AddFriend> {
+  final ProfileController profileController = Get.put(ProfileController());
+  final formKey = GlobalKey<FormState>();
+  TextEditingController controller = TextEditingController();
+  final AuthController authController = Get.put(AuthController());
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,11 +49,11 @@ class _AddFriendState extends State<AddFriend> {
             margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
             child: Column(
               children: [
-                Container(
-                  child: const InputWidget(
-                    color: inputBackground,
-                    hint: 'Enter Username',
-                  ),
+                InputWidget(
+                  formKey: formKey,
+                  color: inputBackground,
+                  hint: 'Enter Username',
+                  controller: controller,
                 ),
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 20),
@@ -65,7 +73,19 @@ class _AddFriendState extends State<AddFriend> {
                               title: 'Add',
                               color: buttonB,
                               txtColor: secondaryGreen,
-                              onPressed: () async {})),
+                              onPressed: () async {
+                                if (formKey.currentState!.validate()) {
+                                  formKey.currentState!.save();
+
+                                  await profileController
+                                      .verifyUsername(controller.text);
+                                } else {
+                                  Get.snackbar(
+                                      'Error', 'Username already exists',
+                                      snackPosition: SnackPosition.TOP,
+                                      backgroundColor: Colors.red);
+                                }
+                              })),
                     ],
                   ),
                 ),

@@ -1,20 +1,20 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_picker/image_picker.dart';
 
 class ProfileRepository {
   Future<void> createUserProfile(String userId, String username, int totalScore,
-      bool isSubscribed, imageUrl,List<String> friends) async {
+      bool isSubscribed, imageUrl, List<String> friends,List<String> requests) async {
     try {
+      
       Map<String, dynamic> profileData = {
         'username': username,
         'total_score': totalScore,
         'is_subscribed': isSubscribed,
         'profile_picture_url': imageUrl,
-        'friends':friends
+        'friends': friends,
+        'requests': requests,
       };
       await FirebaseFirestore.instance
           .collection('profiles')
@@ -41,17 +41,17 @@ class ProfileRepository {
   }
 
   Future<bool> hasProfile(String uid) async {
-  try {
-    final profileSnapshot = await FirebaseFirestore.instance
-        .collection('profiles')
-        .doc(uid)
-        .get();
-    return profileSnapshot.exists;
-  } catch (e) {
-    log('Error checking user profile: $e');
-    return false;
+    try {
+      final profileSnapshot = await FirebaseFirestore.instance
+          .collection('profiles')
+          .doc(uid)
+          .get();
+      return profileSnapshot.exists;
+    } catch (e) {
+      log('Error checking user profile: $e');
+      return false;
+    }
   }
-}
 
   Future<bool> checkUsernameExists(String username) async {
     final QuerySnapshot<Map<String, dynamic>> result = await FirebaseFirestore
@@ -92,5 +92,4 @@ class ProfileRepository {
 
     return imageUrls;
   }
-
 }

@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:fuzzy_trivia/premium_features/premium_home.dart';
 import 'package:fuzzy_trivia/premium_features/profile/controller/profie_controller.dart';
 import 'package:get/get.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../../auth/controller/auth_controller.dart';
 import '../../constants.dart';
-import '../../premium_features/single_player/match_making/ui/matchmaking_screen.dart';
 import '../../questions/controller/question_controller.dart';
 
 class ScoreScreen extends StatefulWidget {
@@ -98,32 +96,30 @@ class _ScoreScreenState extends State<ScoreScreen> {
                           Container(
                               margin: const EdgeInsets.symmetric(vertical: 10),
                               child: Image.asset('assets/images/trophy.png')),
-                          Container(
-                            child: Column(
-                              children: [
-                                Text(
-                                  "You get +${qnController.numOfCorrectAns * 10} Quiz Points",
-                                  style: const TextStyle(fontSize: 18),
-                                ),
-                                Container(
-                                  margin: const EdgeInsets.symmetric(
-                                      vertical: 15, horizontal: 20),
-                                  height: 58,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      color: Colors.white.withOpacity(0.29)),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Center(
-                                      child: Text(
-                                        "New Score: ${profileController.newScore.toString()}",
-                                        style: const TextStyle(fontSize: 18),
-                                      ),
+                          Column(
+                            children: [
+                              Text(
+                                "You get +${qnController.numOfCorrectAns * 10} Quiz Points",
+                                style: const TextStyle(fontSize: 18),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 15, horizontal: 20),
+                                height: 58,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.white.withOpacity(0.29)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Center(
+                                    child: Text(
+                                      "New Score: ${profileController.newScore.toString()}",
+                                      style: const TextStyle(fontSize: 18),
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
+                                ),
+                              )
+                            ],
                           ),
                         ],
                       ),
@@ -229,7 +225,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
                         ],
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     Row(
                       children: [
                         GestureDetector(
