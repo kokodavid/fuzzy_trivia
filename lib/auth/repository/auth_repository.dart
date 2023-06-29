@@ -7,7 +7,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 class AuthRepository {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-  
 
   Future<bool> checkUserProfile(String uid) async {
     DocumentReference<Map<String, dynamic>> gameRoomRef =
@@ -15,7 +14,7 @@ class AuthRepository {
 
     DocumentSnapshot<Map<String, dynamic>> profileSnapshot =
         await gameRoomRef.get();
-        
+
     return profileSnapshot.data()!.isNotEmpty;
   }
 

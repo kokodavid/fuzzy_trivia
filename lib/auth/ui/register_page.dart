@@ -1,4 +1,4 @@
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fuzzy_trivia/premium_features/premium_home.dart';
 import 'package:fuzzy_trivia/premium_features/profile/controller/profie_controller.dart';
@@ -15,8 +15,8 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final AuthController _authController = Get.put(AuthController());
-
+  final AuthController authController = Get.put(AuthController());
+  FirebaseAuth auth = FirebaseAuth.instance;
   final ProfileController profileController = Get.put(ProfileController());
 
   @override
@@ -27,7 +27,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _authController.user.value == null
+      body: auth.currentUser == null
           ? Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(
@@ -97,8 +97,8 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              _authController.user.value == null
-                                  ? _authController.signInWithGoogle()
+                              authController.user.value == null
+                                  ? authController.signInWithGoogle()
                                   : const PremiumHome();
                             },
                             child: Container(
@@ -150,7 +150,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
             )
-          : _authController.hasProfile == true
+          : authController.profileAvailable != false
               ? const PremiumHome()
               : const CreateProfilePage(),
     );

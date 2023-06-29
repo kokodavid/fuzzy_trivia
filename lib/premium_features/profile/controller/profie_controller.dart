@@ -19,6 +19,7 @@ class ProfileController extends GetxController {
 
   File? imageFile;
   bool? usernameBool;
+  String? userId;
   String? profileUrl;
   int? newScore;
   String? userName;
@@ -42,6 +43,7 @@ class ProfileController extends GetxController {
 
   void _init() async {
     getAvatarList();
+    
     try {
       final currentUser = getUserData(authController.user.value!.uid);
 
@@ -109,16 +111,18 @@ class ProfileController extends GetxController {
   verifyUsername(username) async {
     try {
       usernameBool = await _profileRepository.checkUsernameExists(username);
+      userId = _profileRepository.uid;
+      log("UserId${userId.toString()}");
     } catch (e) {
       log(e.toString());
     }
   }
 
-  uploadProfile(
-      userId, username, totalScore, isSubscribed, imageUrl, friends,requests) async {
+  uploadProfile(userId, username, totalScore, isSubscribed, imageUrl, friends,
+      requests) async {
     try {
-      await _profileRepository.createUserProfile(
-          userId, username, totalScore, isSubscribed, imageUrl, friends,requests);
+      await _profileRepository.createUserProfile(userId, username, totalScore,
+          isSubscribed, imageUrl, friends, requests);
     } catch (e) {
       log(e.toString());
     }

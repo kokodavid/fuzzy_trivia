@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fuzzy_trivia/premium_features/friends/controller/friends_controller.dart';
 import 'package:fuzzy_trivia/premium_features/single_player/match_making/ui/input_widget.dart';
 import 'package:get/get.dart';
 
@@ -16,6 +18,10 @@ class AddFriend extends StatefulWidget {
 
 class _AddFriendState extends State<AddFriend> {
   final ProfileController profileController = Get.put(ProfileController());
+  final FriendsController friendsController = Get.put(FriendsController());
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+
   final formKey = GlobalKey<FormState>();
   TextEditingController controller = TextEditingController();
   final AuthController authController = Get.put(AuthController());
@@ -79,11 +85,20 @@ class _AddFriendState extends State<AddFriend> {
 
                                   await profileController
                                       .verifyUsername(controller.text);
-                                } else {
-                                  Get.snackbar(
-                                      'Error', 'Username already exists',
-                                      snackPosition: SnackPosition.TOP,
-                                      backgroundColor: Colors.red);
+
+                                  await friendsController.sendRequest(
+                                      auth.currentUser!.uid, profileController.userId!);
+
+                                  if (profileController.usernameBool == true) {
+                                    Get.snackbar('Success', 'Request sent',
+                                        snackPosition: SnackPosition.TOP,
+                                        backgroundColor: Colors.green);
+                                  } else {
+                                    Get.snackbar(
+                                        'Error', 'Username does not exist',
+                                        snackPosition: SnackPosition.TOP,
+                                        backgroundColor: Colors.red);
+                                  }
                                 }
                               })),
                     ],

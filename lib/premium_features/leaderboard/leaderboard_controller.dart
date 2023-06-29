@@ -40,7 +40,7 @@ class LeaderboardController extends GetxController {
 
                       List<DocumentSnapshot> documents = snapshot.data!.docs;
                       userRank =
-                          getRanking(documents, authController.user.value!.uid);
+                          getRanking(documents, authController.auth.currentUser!.uid);
 
 
                       if (index < 3) {

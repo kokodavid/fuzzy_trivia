@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fuzzy_trivia/constants.dart';
+import 'package:fuzzy_trivia/models/friends_model.dart';
 import 'package:fuzzy_trivia/premium_features/premium_home.dart';
 import 'package:get/get.dart';
 
@@ -27,7 +28,7 @@ class _CreatProfilePageState extends State<CreateProfilePage> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController controller = TextEditingController();
   final AuthController authController = Get.put(AuthController());
-  List<String> friends = [];
+  List<Friend> friends = [];
   List<String> requests = [];
 
   @override

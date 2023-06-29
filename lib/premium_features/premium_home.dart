@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fuzzy_trivia/premium_features/friends/controller/friends_controller.dart';
 import 'package:fuzzy_trivia/premium_features/friends/ui/friends_bottomsheet.dart';
 import 'package:fuzzy_trivia/premium_features/leaderboard/leaderboard.dart';
 import 'package:fuzzy_trivia/premium_features/profile/controller/profie_controller.dart';
@@ -24,12 +25,14 @@ class _PremiumHomeState extends State<PremiumHome> {
   final AuthController authController = Get.put(AuthController());
 
   final ProfileController profileController = Get.put(ProfileController());
+  final FriendsController friendsController = Get.put(FriendsController());
+
   final LeaderboardController leaderboardController =
       Get.put(LeaderboardController());
 
   @override
   void initState() {
-    profileController.getUserData(authController.user.value!.uid);
+    profileController.getUserData(authController.auth.currentUser!.uid);
     super.initState();
   }
 
@@ -97,18 +100,42 @@ class _PremiumHomeState extends State<PremiumHome> {
                               },
                             );
                           },
-                          child: Container(
-                              height: 50,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: Colors.white),
-                              child: Container(
-                                margin: const EdgeInsets.all(12),
-                                child: Image.asset(
-                                  'assets/icons/friends.png',
+                          child: Stack(
+                            children: [
+                              Container(
+                                  height: 50,
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      color: Colors.white),
+                                  child: Container(
+                                    margin: const EdgeInsets.all(12),
+                                    child: Image.asset(
+                                      'assets/icons/friends.png',
+                                    ),
+                                  )),
+                              friendsController.requests != null ? Positioned(
+                                top: 0,
+                                right: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.red,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Obx(
+                                    ()=> Text(
+                                      '${friendsController.requests!.value}',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              )),
+                              ):Container(),
+                            ],
+                          ),
                         )
                       ],
                     ),

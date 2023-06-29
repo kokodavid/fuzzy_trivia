@@ -2,18 +2,29 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:fuzzy_trivia/models/friends_model.dart';
 
 class ProfileRepository {
-  Future<void> createUserProfile(String userId, String username, int totalScore,
-      bool isSubscribed, imageUrl, List<String> friends,List<String> requests) async {
-    try {
+  String? uid;
+
+  Future<void> createUserProfile(
+      String userId,
+      String username,
+      int totalScore,
+      bool isSubscribed,
+      imageUrl,
+      List<Friend> friends,
+      List<String> requests
       
+
+      ) async {
+    try {
       Map<String, dynamic> profileData = {
         'username': username,
         'total_score': totalScore,
         'is_subscribed': isSubscribed,
         'profile_picture_url': imageUrl,
-        'friends': friends,
+        'friends': friends.map((friend) => friend.toMap()).toList(),
         'requests': requests,
       };
       await FirebaseFirestore.instance
@@ -59,6 +70,13 @@ class ProfileRepository {
         .collection('profiles')
         .where('username', isEqualTo: username)
         .get();
+
+    // log("Profile Data ${result.docs[0].id.toString()}");
+
+    if (result.docs.isNotEmpty) {
+       uid = result.docs[0].id.toString();
+    }
+
     return result.docs.isNotEmpty;
   }
 

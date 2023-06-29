@@ -74,7 +74,7 @@ class _ProfileBottomSheetState extends State<ProfileBottomSheet> {
                               fontSize: 19),
                         ),
                         Text(
-                          authController.user.value!.displayName!,
+                          authController.auth.currentUser!.displayName!,
                           style: const TextStyle(
                               color: Colors.black, fontSize: 15),
                         ),

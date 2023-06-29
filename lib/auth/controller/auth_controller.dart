@@ -13,6 +13,7 @@ import '../repository/auth_repository.dart';
 class AuthController extends GetxController {
   final AuthRepository authRepository = AuthRepository();
   final ProfileRepository profileRepository = ProfileRepository();
+  FirebaseAuth auth = FirebaseAuth.instance;
 
   Rx<User?> user = Rx<User?>(null);
   bool? profileAvailable;
@@ -28,9 +29,7 @@ class AuthController extends GetxController {
   void _init() async {
     try {
       final currentUser = authRepository.getCurrentUser();
-      
-      hasProfile = await profileRepository.hasProfile(user.value!.uid);
-
+      authRepository.checkUserProfile(auth.currentUser!.uid);
       if (currentUser != null) {
         user.value = currentUser;
         log(user.value!.uid);
@@ -40,19 +39,19 @@ class AuthController extends GetxController {
     }
   }
 
-  checkUserData(userId) async {
-    try {
-      final userData = await authRepository.checkUserProfile(userId);
+  // checkUserData(userId) async {
+  //   try {
+  //     final userData = await authRepository.checkUserProfile(userId);
 
-      profileAvailable = userData;
+  //     profileAvailable = userData;
 
-      log("USERDATA===> ${profileAvailable.toString()}");
+  //     log("USERDATA===> ${profileAvailable.toString()}");
 
-      update();
-    } catch (e) {
-      log("NULL==> ${e.toString()}");
-    }
-  }
+  //     update();
+  //   } catch (e) {
+  //     log("NULL==> ${e.toString()}");
+  //   }
+  // }
 
   void signInWithGoogle() async {
     try {
@@ -60,17 +59,19 @@ class AuthController extends GetxController {
       final result = await authRepository.signInWithGoogle();
 
       if (result != null) {
-        user.value = result.user;        
-        if (hasProfile == true) {
+        user.value = result.user;
+
+        // profileAvailable =
+        //     await authRepository.checkUserProfile(auth.currentUser!.uid);
+
+        if (profileAvailable == true) {
           Get.to(() => const PremiumHome());
         } else {
           Get.to(() => const CreateProfilePage());
         }
-      } else {
-        Get.snackbar('Error', 'Unable to sign in with Google.');
       }
-    } catch (e) {
-      log(e.toString());
+    } catch (e, c) {
+      log('$e ${c.toString()}');
       Get.snackbar('Error', 'Unable to sign in with Google.');
     }
   }
