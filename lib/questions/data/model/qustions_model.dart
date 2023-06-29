@@ -33,16 +33,16 @@ class Questions {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['category'] = this.category;
-    data['id'] = this.id;
-    data['correctAnswer'] = this.correctAnswer;
-    data['incorrectAnswers'] = this.incorrectAnswers;
-    data['question'] = this.question;
-    data['tags'] = this.tags;
-    data['type'] = this.type;
-    data['difficulty'] = this.difficulty;
-    data['isNiche'] = this.isNiche;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['category'] = category;
+    data['id'] = id;
+    data['correctAnswer'] = correctAnswer;
+    data['incorrectAnswers'] = incorrectAnswers;
+    data['question'] = question;
+    data['tags'] = tags;
+    data['type'] = type;
+    data['difficulty'] = difficulty;
+    data['isNiche'] = isNiche;
     return data;
   }
 }
